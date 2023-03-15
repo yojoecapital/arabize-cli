@@ -21,7 +21,13 @@ namespace Arabize
 
         static string MacrosFilePath{
             get{
-                return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, macrosFileName);
+                var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, macrosFileName);
+                if (!File.Exists(filePath))
+                {
+                    XDocument xml = new XDocument(new XElement("root"));
+                    xml.Save(filePath);
+                }
+                return filePath;
             }
         }
 
