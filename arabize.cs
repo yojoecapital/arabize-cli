@@ -193,10 +193,14 @@ namespace Arabize
             return string.Join(" ", arabic);
         }
 
-        static Dictionary<string, string> GetMacros()
+        static Dictionary<string, string> GetMacros() { return GetDictionary(MacrosFilePath); }
+
+        static Dictionary<string, string> GetLetters() { return GetDictionary(LettersFilePath); }
+
+        static Dictionary<string, string> GetDictionary(string filePath)
         {
             try{
-                return XDocument.Load(MacrosFilePath).Root.Elements()
+                return XDocument.Load(filePath).Root.Elements()
                     .ToDictionary(x => x.Attribute("key").Value, x => x.Attribute("value").Value);
             }
             catch {
@@ -218,6 +222,14 @@ namespace Arabize
                 else {
                     foreach (var key in macros.Keys)
                         Console.WriteLine(key + " \u2192 " + macros[key]);
+                }
+            }
+            else if (args[0].Equals("letters") && args.Length == 1){
+                var letters = GetLetters();
+                if (letters == null) Console.WriteLine("Error: unable to parse mappings");
+                else {
+                    foreach (var key in letters.Keys)
+                        Console.WriteLine(key + " \u2192 " + letters[key]);
                 }
             }
             else if (args[0].Equals("add") && args.Length == 3){
