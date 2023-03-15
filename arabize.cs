@@ -133,14 +133,16 @@ namespace Arabize
             foreach (var word in words)
             {
                 var letters = word.Split('_');
+                var arabicWord = string.Empty;
                 foreach (var letter in letters)
                 {
                     var key = FindClosestKey(mapping, letter);
                     if (mapping.ContainsKey(key))
                     {
-                        arabic.Add(mapping[key]);
+                        arabicWord += mapping[key];
                     }
                 }
+                arabic.Add(arabicWord);
             }
 
             return string.Join(" ", arabic);
