@@ -27,4 +27,5 @@
   <row value="ه" key="haa" />
   <row value="و" key="waw" />
   <row value="ي" key="ya" />
+  <row value="ء" key="hamza" />
 </root>

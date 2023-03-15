@@ -91,7 +91,7 @@ namespace Arabize
             
             XElement newRow = new XElement("row",
                               new XAttribute("key", key),
-                              new XAttribute("value", value));
+                              new XAttribute("value", value.Trim()));
             
             xml.Element("root").Add(newRow);
             xml.Save(MacrosFilePath);
