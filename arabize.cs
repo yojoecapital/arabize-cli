@@ -136,10 +136,55 @@ namespace Arabize
                 var arabicWord = string.Empty;
                 foreach (var letter in letters)
                 {
+                    var symbol = string.Empty;
+                    if (letter.EndsWith("''")) // fathatan
+                    {
+                        symbol = "\u064B";
+                        letter.TrimEnd('\'');
+                        letter.TrimEnd('\'');
+                    }
+                    else if (letter.EndsWith("'")) // fatha
+                    {
+                        symbol = "\u064E";
+                        letter.TrimEnd('\'');
+                    }
+                    else if (letter.EndsWith("--")) // kasratan
+                    {
+                        symbol = "\u064D";
+                        letter.TrimEnd('-');
+                        letter.TrimEnd('-');
+                    }
+                    else if (letter.EndsWith("-")) // kasra
+                    {
+                        symbol = "\u0650";
+                        letter.TrimEnd('-');
+                    }
+                    else if (letter.EndsWith("%%")) // dammatan
+                    {
+                        symbol = "\u064C";
+                        letter.TrimEnd('%');
+                        letter.TrimEnd('%');
+                    }
+                    else if (letter.EndsWith("%")) // damma
+                    {
+                        symbol = "\u064F";
+                        letter.TrimEnd('%');
+                    }
+                    else if (letter.EndsWith("$")) // shadda
+                    {
+                        symbol = "\u0651";
+                        letter.TrimEnd('$');
+                    }
+                    else if (letter.EndsWith("#")) // sukun
+                    {
+                        symbol = "\u0652";
+                        letter.TrimEnd('#');
+                    }
+                    
                     var key = FindClosestKey(mapping, letter);
                     if (mapping.ContainsKey(key))
                     {
-                        arabicWord += mapping[key];
+                        arabicWord += mapping[key] + symbol;
                     }
                 }
                 arabic.Add(arabicWord);
