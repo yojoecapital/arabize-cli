@@ -2,7 +2,7 @@
 
 This is a command to translate Arabic-transliterated letters into Arabic Unicode characters and copy to clipboard.
 
-To use it, place the path of the `Arabize` directory in `Path` for System Variables.
+To access it easier, place the path of the `Arabize` directory in `Path` for System Variables.
 
 To recompile, use `csc arabize-script.c`.
 
@@ -35,3 +35,5 @@ Use `arabize add laa lam_alim` to add لا in place of `laa`.
 Use `arabize add-lit laa لا ` to add لا using its literal Unicode characters in place of `laa`.
 
 Use `arabize remove laa` to remove the macro.
+
+Use `arabize macros` to get a list of all current macros.

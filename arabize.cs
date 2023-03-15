@@ -147,6 +147,17 @@ namespace Arabize
             return arabic;
         }
 
+        static Dictionary<string, string> GetMacros()
+        {
+            try{
+                return XDocument.Load(MacrosFilePath).Root.Elements()
+                    .ToDictionary(x => x.Attribute("key").Value, x => x.Attribute("value").Value);
+            }
+            catch {
+                return null;
+            }
+        }
+
         [STAThreadAttribute]
         static void Main(string[] args)
         {
@@ -154,6 +165,14 @@ namespace Arabize
             if (args.Length < 1){
                 Console.WriteLine("Usage: arabize.exe <transliterated Arabic>");
                 return;
+            }
+            else if (args[0].Equals("macros") && args.Length == 1){
+                var macros = GetMacros();
+                if (macros == null) Console.WriteLine("Error: unable to parse mappings");
+                else {
+                    foreach (var key in macros.Keys)
+                        Console.WriteLine(key + " \u2192 " + macros[key]);
+                }
             }
             else if (args[0].Equals("add") && args.Length == 3){
                 var arabic = Arabize(args[2]);

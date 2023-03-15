@@ -8,9 +8,11 @@
   <row key="laazim" value="لازم " />
   <row key="alifhamza" value="أ" />
   <row key="alif-hamza" value="إ" />
-  <row key="alif-madda" value="آ" />
-  <row key="illa" value="إلا " />
+  <row key="alif-med" value="آ" />
   <row key="inna" value="إن " />
   <row key="alif-maksoora" value="ى" />
   <row key="al" value="ال" />
+  <row key="alquran" value="القرءان" />
+  <row key="la" value="لا" />
+  <row key="illa" value="إلا" />
 </root>
