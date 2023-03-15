@@ -56,15 +56,52 @@ namespace ArabicTransliterator
             return d[m, n];
         }
 
-        static void Main(string[] args)
+        static void AppendToFile(string key, string value) 
         {
-            Console.OutputEncoding = System.Text.Encoding.UTF8;
-            if (args.Length < 1)
+            string filePath = AppDomain.CurrentDomain.BaseDirectory + "/arabic-letters.txt";
+            // Check if the key already exists in the file
+            if (File.ReadLines(filePath).Any(line => line.Split(':')[1].Trim().Equals(key)))
             {
-                Console.WriteLine("Usage: arabize.exe <transliterated Arabic>");
+                Console.WriteLine("Error: key already exists in the file");
                 return;
             }
 
+            using (StreamWriter sw = File.AppendText(filePath)) {
+                sw.WriteLine(value + ":" + key);
+            }
+        }
+
+        public static string RemoveFromFile(string key)
+        {
+            string filePath = AppDomain.CurrentDomain.BaseDirectory + "/arabic-letters.txt";
+            string value = null;
+            string[] lines = File.ReadAllLines(filePath);
+            List<string> newLines = new List<string>();
+
+            foreach (string line in lines)
+            {
+                string[] parts = line.Split(':');
+                if (parts.Length == 2)
+                {
+                    string currentKey = parts[1].Trim();
+                    if (!currentKey.Equals(key))
+                    {
+                        newLines.Add(line);
+                    }
+                    else
+                    {
+                        value = parts[0].Trim();
+                    }
+                }
+            }
+
+            File.WriteAllLines(filePath, newLines);
+
+            return value;
+}
+
+        static string Arabize(string transliteration)
+        {
             Dictionary<string, string> mapping;
             try
             {
@@ -74,13 +111,10 @@ namespace ArabicTransliterator
             }
             catch 
             {
-                Console.WriteLine("Error: unable to parse arabic-letters.txt");
-                return;
+                return "Error: unable to parse arabic-letters.txt";
             }
+            string arabic = string.Empty;
             var keys = mapping.Keys.ToArray();
-
-            var transliteration = string.Join(" ", args);
-
             var words = transliteration.Split(' ');
             foreach (var word in words)
             {
@@ -90,13 +124,46 @@ namespace ArabicTransliterator
                     var key = FindClosestKey(keys, letter);
                     if (mapping.ContainsKey(key))
                     {
-                        Console.Write(mapping[key]);
+                        arabic += mapping[key];
                     }
                 }
-                Console.Write(" ");
+                arabic += " ";
             }
 
-            Console.WriteLine();
+            return arabic;
+        }
+
+        static void Main(string[] args)
+        {
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
+            if (args.Length < 1){
+                Console.WriteLine("Usage: arabize.exe <transliterated Arabic>");
+                return;
+            }
+            else if (args[0].Equals("add") && args.Length == 3){
+                var arabic = Arabize(args[2]);
+                AppendToFile(args[1], arabic);
+                Console.WriteLine("Added " +  arabic + " for " + args[1]);
+                return;
+            }
+            else if (args[0].Equals("add-lit") && args.Length == 3){
+                AppendToFile(args[1], args[2]);
+                Console.WriteLine("Added " +  args[2] + " for " + args[1]);
+                return;
+            }
+            else if (args[0].Equals("remove") && args.Length == 2){
+                var value = RemoveFromFile(args[1]);
+                if (value != null) Console.WriteLine("Removed " +  args[1] + " for " + value);
+                else Console.WriteLine("Error: unable to find " +  args[1]);
+                return;
+            }
+            else
+            {
+                var arabic = Arabize(string.Join(" ", args));
+                Console.WriteLine("~" + arabic);
+            }
+
+            
         }
     }
 }

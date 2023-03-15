@@ -5,8 +5,15 @@ if ($args.Count -gt 0)
 {
     Start-Process $arabizePath -ArgumentList $args -NoNewWindow -Wait -RedirectStandardOutput $tmpFile
     $output = Get-Content $tmpFile -Encoding UTF8
-    Set-Clipboard $output
-    Write-Output $output
+    if ($output[0] -eq '~') {
+        $copy = $output.Substring(1)
+        Set-Clipboard $copy
+        Write-Output $copy
+    }
+    else 
+    {
+        Write-Output $output
+    }
 }
 # SIG # Begin signature block
 # MIIbmwYJKoZIhvcNAQcCoIIbjDCCG4gCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB

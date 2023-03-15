@@ -28,7 +28,15 @@ This copies this text:
 
 > لا اله الا الله 
 
-To add substitutions, edit the `arabic-letters.txt` file. The value goes on the left and the key goes on the right. The key is the transliterated letters whilst the values are the Arabic Unicode characters.
+## How to Substitutions:
+
+Use `arabize add laa lam_alim` to add لا in place of `laa`.
+
+Use `arabize add-lit laa لا ` to add لا using its literal Unicode characters in place of `laa`.
+
+Use `arabize remove laa` to remove the substitutions.
+
+To manually add substitutions, edit the `arabic-letters.txt` file. The value goes on the left and the key goes on the right. The key is the transliterated letters whilst the values are the Arabic Unicode characters.
 
 ```
 ا:alif
