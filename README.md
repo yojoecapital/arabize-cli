@@ -4,7 +4,7 @@ This is a command to translate Arabic-transliterated letters into Arabic Unicode
 
 To use it, place the path of the `Arabize` directory in `Path` for System Variables.
 
-To recompile, use `css arabize-script.c`.
+To recompile, use `csc arabize-script.c`.
 
 ## How to use:
 
@@ -28,22 +28,10 @@ This copies this text:
 
 > لا اله الا الله 
 
-## How to Substitutions:
+## How to Use Macros:
 
 Use `arabize add laa lam_alim` to add لا in place of `laa`.
 
 Use `arabize add-lit laa لا ` to add لا using its literal Unicode characters in place of `laa`.
 
-Use `arabize remove laa` to remove the substitutions.
-
-To manually add substitutions, edit the `arabic-letters.txt` file. The value goes on the left and the key goes on the right. The key is the transliterated letters whilst the values are the Arabic Unicode characters.
-
-```
-ا:alif
-ب:ba
-ت:ta
-...
-<value>:<key>
-```
-
-The keys must be unique or an error will be thrown when running `arabize`.
+Use `arabize remove laa` to remove the macro.
