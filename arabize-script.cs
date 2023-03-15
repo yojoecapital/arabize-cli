@@ -56,19 +56,22 @@ namespace ArabicTransliterator
             return d[m, n];
         }
 
-        static void AppendToFile(string key, string value) 
+        static bool AppendToFile(string key, string value) 
         {
             string filePath = AppDomain.CurrentDomain.BaseDirectory + "/arabic-letters.txt";
             // Check if the key already exists in the file
             if (File.ReadLines(filePath).Any(line => line.Split(':')[1].Trim().Equals(key)))
             {
                 Console.WriteLine("Error: key already exists in the file");
-                return;
+                return false;
             }
 
             using (StreamWriter sw = File.AppendText(filePath)) {
                 sw.WriteLine(value + ":" + key);
             }
+
+            Console.WriteLine("Added " +  value + " for " + key);
+            return true;
         }
 
         public static string RemoveFromFile(string key)
@@ -141,14 +144,11 @@ namespace ArabicTransliterator
                 return;
             }
             else if (args[0].Equals("add") && args.Length == 3){
-                var arabic = Arabize(args[2]);
-                AppendToFile(args[1], arabic);
-                Console.WriteLine("Added " +  arabic + " for " + args[1]);
+                AppendToFile(args[1], Arabize(args[2]));
                 return;
             }
             else if (args[0].Equals("add-lit") && args.Length == 3){
                 AppendToFile(args[1], args[2]);
-                Console.WriteLine("Added " +  args[2] + " for " + args[1]);
                 return;
             }
             else if (args[0].Equals("remove") && args.Length == 2){
