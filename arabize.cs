@@ -128,7 +128,7 @@ namespace Arabize
             {
                 return null;
             }
-            string arabic = string.Empty;
+            var arabic = new List<string>();
             var words = transliteration.Split(' ');
             foreach (var word in words)
             {
@@ -138,13 +138,12 @@ namespace Arabize
                     var key = FindClosestKey(mapping, letter);
                     if (mapping.ContainsKey(key))
                     {
-                        arabic += mapping[key];
+                        arabic.Add(mapping[key]);
                     }
                 }
-                arabic += " ";
             }
 
-            return arabic;
+            return string.Join(" ", arabic);
         }
 
         static Dictionary<string, string> GetMacros()
