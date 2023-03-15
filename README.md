@@ -11,7 +11,7 @@ To recompile, use `csc arabize-script.c`.
 Pass the transliterated letters to have the Arabic Unicode copied to clipboard.
 
 ```
-C:\> arabize alif_lam_ra_ha_meem_alif_noon
+$ arabize alif_lam_ra_ha_meem_alif_noon
 ```
 
 This copies this text:
@@ -21,7 +21,7 @@ This copies this text:
 Use `_` characters to delimit letters. Use space characters to delimit words.
 
 ```
-C:\> arabize lam_alif alif_lam_haa alif_lam_alif alif_lam_lam_haa
+$ arabize lam_alif alif_lam_haa alif_lam_alif alif_lam_lam_haa
 ```
 
 This copies this text:
