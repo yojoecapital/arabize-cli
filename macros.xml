@@ -1,5 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <row key="Allah" value="الله " />
   <row key="laa" value="لا " />
+  <row key="Allah" value="الله" />
+  <row key="yusuf" value="يوسف " />
+  <row key="Muhammad" value="محمد " />
+  <row key="med" value="مد " />
+  <row key="laazim" value="لازم " />
+  <row key="alifhamza" value="أ" />
+  <row key="alif-hamza" value="إ" />
+  <row key="alif-madda" value="آ" />
+  <row key="illa" value="إلا " />
+  <row key="inna" value="إن " />
+  <row key="alif-maksoora" value="ى" />
 </root>
