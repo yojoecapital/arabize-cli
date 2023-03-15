@@ -6,7 +6,6 @@
   <row key="Muhammad" value="محمد " />
   <row key="med" value="مد " />
   <row key="laazim" value="لازم " />
-  <row key="alifhamza" value="أ" />
   <row key="alif-hamza" value="إ" />
   <row key="alif-med" value="آ" />
   <row key="inna" value="إن " />
@@ -15,4 +14,5 @@
   <row key="alquran" value="القرءان" />
   <row key="la" value="لا" />
   <row key="illa" value="إلا" />
+  <row key="alifhamza" value="أ" />
 </root>
