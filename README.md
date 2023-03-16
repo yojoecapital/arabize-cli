@@ -32,7 +32,7 @@ This copies this text:
 
 ## How to Use Diacritics:
 
-Use these sequences to the end of a transliterated letter to add a diacritic to the Arabic Unicode letter.
+Use these sequences at the end of a transliterated letter to add a diacritic ligature to the Arabic Unicode letter.
 
 | Sequence | Diacritic |
 | :------: | :-------: |
