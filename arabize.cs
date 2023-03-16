@@ -5,6 +5,7 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace Arabize
 {
@@ -113,6 +114,53 @@ namespace Arabize
             else return null;
         }  
 
+        static string TrimForSymbol(string letter, out string symbol)
+        {
+            symbol = string.Empty;
+            var letterTrim = letter;
+            if (letterTrim.EndsWith("''")) // fathatan
+            {
+                symbol = "\u064B";
+                letterTrim = letterTrim.TrimEnd('\'').TrimEnd('\'');
+            }
+            else if (letterTrim.EndsWith("'")) // fatha
+            {
+                symbol = "\u064E";
+                letterTrim = letterTrim.TrimEnd('\'');
+            }
+            else if (letterTrim.EndsWith("--")) // kasratan
+            {
+                symbol = "\u064D";
+                letterTrim = letterTrim.TrimEnd('-').TrimEnd('-');
+            }
+            else if (letterTrim.EndsWith("-")) // kasra
+            {
+                symbol = "\u0650";
+                letterTrim = letterTrim.TrimEnd('-');
+            }
+            else if (letterTrim.EndsWith("%%")) // dammatan
+            {
+                symbol = "\u064C";
+                letterTrim = letterTrim.TrimEnd('%').TrimEnd('%');
+            }
+            else if (letterTrim.EndsWith("%")) // damma
+            {
+                symbol = "\u064F";
+                letterTrim = letterTrim.TrimEnd('%');
+            }
+            else if (letterTrim.EndsWith("$")) // shadda
+            {
+                symbol = "\u0651";
+                letterTrim = letterTrim.TrimEnd('$');
+            }
+            else if (letterTrim.EndsWith("#")) // sukun
+            {
+                symbol = "\u0652";
+                letterTrim = letterTrim.TrimEnd('#');
+            }
+            return letterTrim;
+        }
+
         static string Arabize(string transliteration)
         {
             Dictionary<string, string> mapping;
@@ -136,52 +184,8 @@ namespace Arabize
                 var arabicWord = string.Empty;
                 foreach (var letter in letters)
                 {
-                    var symbol = string.Empty;
-                    if (letter.EndsWith("''")) // fathatan
-                    {
-                        symbol = "\u064B";
-                        letter.TrimEnd('\'');
-                        letter.TrimEnd('\'');
-                    }
-                    else if (letter.EndsWith("'")) // fatha
-                    {
-                        symbol = "\u064E";
-                        letter.TrimEnd('\'');
-                    }
-                    else if (letter.EndsWith("--")) // kasratan
-                    {
-                        symbol = "\u064D";
-                        letter.TrimEnd('-');
-                        letter.TrimEnd('-');
-                    }
-                    else if (letter.EndsWith("-")) // kasra
-                    {
-                        symbol = "\u0650";
-                        letter.TrimEnd('-');
-                    }
-                    else if (letter.EndsWith("%%")) // dammatan
-                    {
-                        symbol = "\u064C";
-                        letter.TrimEnd('%');
-                        letter.TrimEnd('%');
-                    }
-                    else if (letter.EndsWith("%")) // damma
-                    {
-                        symbol = "\u064F";
-                        letter.TrimEnd('%');
-                    }
-                    else if (letter.EndsWith("$")) // shadda
-                    {
-                        symbol = "\u0651";
-                        letter.TrimEnd('$');
-                    }
-                    else if (letter.EndsWith("#")) // sukun
-                    {
-                        symbol = "\u0652";
-                        letter.TrimEnd('#');
-                    }
-                    
-                    var key = FindClosestKey(mapping, letter);
+                    string symbol;
+                    var key = FindClosestKey(mapping, TrimForSymbol(letter, out symbol));
                     if (mapping.ContainsKey(key))
                     {
                         arabicWord += mapping[key] + symbol;
