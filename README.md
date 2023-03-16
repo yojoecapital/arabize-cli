@@ -30,6 +30,31 @@ This copies this text:
 
 > لا اله الا الله 
 
+## How to Use Diacritics:
+
+Use these sequences to the end of a transliterated letter to add a diacritic to the Arabic Unicode letter.
+
+| Sequence | Diacritic |
+| :------: | :-------: |
+|   `''`   | &#x064B;  |
+|   `'`    | &#x064E;  |
+|   `--`   | &#x064D;  |
+|   `-`    | &#x0650;  |
+|   `%%`   | &#x064C;  |
+|   `%`    | &#x064F;  |
+|   `$`    | &#x0651;  |
+|   `#`    | &#x0652;  |
+
+For example:
+
+```
+$ arabize alif-h-_noon$_alif lam-_lam$_haa- waw' alif-h-_noon$_alif alif'h_yah#_haa- ra'_alif_jeem-_ayn%_waw_noon'
+```
+
+Will copy this text:
+
+> إِنّا لِلّهِ وَ إِنّا أيْهِ رَاجِعُونَ
+
 ## How to Use Macros:
 
 Use `arabize add laa lam_alim` to add لا in place of `laa`.
