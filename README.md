@@ -8,7 +8,7 @@ To recompile, use `csc arabize-script.c`.
 
 ## How to use:
 
-Use `arabize letters` to get a list of all transliterated letters and their Unicode mappings
+Use `arabize letters` to get a list of all transliterated letters and their Unicode mappings.
 
 Pass the transliterated letters to have the Arabic Unicode copied to clipboard.
 
