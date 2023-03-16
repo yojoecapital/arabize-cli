@@ -48,12 +48,12 @@ Use these sequences to the end of a transliterated letter to add a diacritic to 
 For example:
 
 ```
-$ arabize alif-h-_noon$_alif lam-_lam$_haa- waw' alif-h-_noon$_alif alif-h_lam_yah#_haa- ra'_alif_jeem-_ayn%_waw_noon'
+$ arabize alif-h-_noon$_alif lam-_lam$_haa- waw' alif-h-_noon$_alif alif-h-_lam_yah#_haa- ra'_alif_jeem-_ayn%_waw_noon'
 ```
 
 Will copy this text:
 
-> إِنّا لِلّهِ وَ إِنّا إليْهِ رَاجِعُونَ
+> إِنّا لِلّهِ وَ إِنّا إِليْهِ رَاجِعُونَ
 
 ## How to Use Macros:
 
