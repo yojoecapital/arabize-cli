@@ -12,15 +12,15 @@ namespace Arabize
     static class Program
     {
         static readonly string lettersFileName = "letters.xml";
-        static readonly string DiacriticsFileName = "diacritics.xml";
+        static readonly string diacriticsFileName = "diacritics.xml";
         static readonly string macrosFileName = "macros.xml";
 
-        static string LettersFilePath{
-            get => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, lettersFileName);
+        static string LettersFilePath {
+            get { return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, lettersFileName); }
         }
 
-        static string DiacriticsFilePath{
-            get => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, diacriticsFileName);
+        static string DiacriticsFilePath {
+            get { return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, diacriticsFileName); }
         }
 
         static string MacrosFilePath{
@@ -32,6 +32,29 @@ namespace Arabize
                     xml.Save(filePath);
                 }
                 return filePath;
+            }
+        }
+
+        static Dictionary<string, string> Macros {
+            get { return GetDictionary(MacrosFilePath); } 
+        }
+
+        static Dictionary<string, string> Diacritics {
+            get { return GetDictionary(DiacriticsFilePath); }
+        }
+
+        static Dictionary<string, string> Letters {
+            get { return GetDictionary(LettersFilePath); }
+        } 
+
+        static Dictionary<string, string> GetDictionary(string filePath)
+        {
+            try{
+                return XDocument.Load(filePath).Root.Elements()
+                    .ToDictionary(x => x.Attribute("key").Value, x => x.Attribute("value").Value);
+            }
+            catch {
+                return null;
             }
         }
 
@@ -117,14 +140,15 @@ namespace Arabize
             else return null;
         }  
 
-        static string TrimForDiacritic(Dictionary<string, string> mapping, string letter, out string diacritic)
+        static string TrimForDiacritic(string letter, out string diacritic)
         {
-            diacritic = string.Empty;
-            foreach (var key in mapping.Keys)
+            var diacritics = Diacritics;
+            diacritic = null;
+            foreach (var key in diacritics.Keys)
             {
-                if (letterTrim.EndsWith(key))
+                if (letter.EndsWith(key))
                 {
-                    diacritic = mapping[key];
+                    diacritic = diacritics[key];
                     if (!letter.EndsWith(key)) return letter;
                     else return letter.Remove(letter.LastIndexOf(key));
                 }
@@ -163,8 +187,7 @@ namespace Arabize
             Dictionary<string, string> mapping;
             try
             {
-                mapping = XDocument.Load(LettersFilePath).Root.Elements()
-                .ToDictionary(x => x.Attribute("key").Value, x => x.Attribute("value").Value);
+                mapping = Letters;
                 var macros = XDocument.Load(MacrosFilePath);
                 foreach (var row in macros.Root.Elements())
                     mapping[row.Attribute("key").Value] = row.Attribute("value").Value;
@@ -173,22 +196,20 @@ namespace Arabize
             {
                 return null;
             }
+            var diacriticsKeys = Diacritics.Keys;
             var arabic = new List<string>();
             var words = transliteration.Split(' ');
             foreach (var word in words)
             {
                 var letters = word.Split('_');
                 var arabicWord = string.Empty;
-                foreach (var letter in letters)
+                foreach (var letter in letters) foreach (var splitLetter in SplitWithDelimiters(letter, diacriticsKeys))
                 {
-                    foreach (var splitLetter in SplitWithDelimiters(letter, Diacritics.Values))
+                    string diacritic;
+                    var key = FindClosestKey(mapping, TrimForDiacritic(splitLetter, out diacritic));
+                    if (mapping.ContainsKey(key))
                     {
-                        string diacritic;
-                        var key = FindClosestKey(mapping, TrimForDiacritic(splitLetter, out diacritic));
-                        if (mapping.ContainsKey(key))
-                        {
-                            arabicWord += mapping[key] + diacritic;
-                        }
+                        arabicWord += mapping[key] + diacritic;
                     }
                 }
                 arabic.Add(arabicWord);
@@ -197,27 +218,34 @@ namespace Arabize
             return string.Join(" ", arabic);
         }
 
-        static Dictionary<string, string> Macros {
-            get => GetDictionary(MacrosFilePath); 
-        }
-
-        static Dictionary<string, string> Diacritics { 
-            get => GetDictionary(DiacriticsFilePath); 
-        }
-
-        static Dictionary<string, string> Letters { 
-            get => GetDictionary(LettersFilePath); 
-        }
-
-        static Dictionary<string, string> GetDictionary(string filePath)
+        static bool ContainsAndAssign(string input, string target, out string substring)
         {
-            try{
-                return XDocument.Load(filePath).Root.Elements()
-                    .ToDictionary(x => x.Attribute("key").Value, x => x.Attribute("value").Value);
+            substring = null;
+            if (input.Contains(target))
+            {
+                substring = target;
+                return true;
             }
-            catch {
-                return null;
+            return false;
+        }
+
+        static bool ContainsDelimiter(string input, out string substring)
+        {
+            string tmp = null;
+            substring = null;
+            if (Diacritics.Keys.Any(diacritic => ContainsAndAssign(input, diacritic, out tmp))) {
+                substring = tmp;
+                return true;
             }
+            else if (input.Contains("_")){
+                substring = "_";
+                return true;
+            }
+            else if (input.Contains(" ")){
+                substring = " ";
+                return true;
+            }
+            else return false;
         }
 
         [STAThreadAttribute]
@@ -248,16 +276,28 @@ namespace Arabize
                 var arabic = Arabize(args[2]);
                 if (arabic == null) Console.WriteLine("Error: unable to parse mappings");
                 else {
-                    if (AddMacro(args[1], arabic)){
-                        Clipboard.SetText(arabic);
-                        Console.WriteLine("Added " + arabic + " for " + args[1]);
+                    var key = args[1];
+                    string badSubstring;
+                    if (ContainsDelimiter(key, out badSubstring)) Console.WriteLine("Error: key should not contain the delimiter \"" + badSubstring + "\"");
+                    else if (AddMacro(key, arabic)){
+                        if (!string.IsNullOrEmpty(arabic)) 
+                        {
+                            Clipboard.SetText(arabic);
+                            Console.WriteLine("Added " + arabic + " for " + key);
+                        } else Console.WriteLine("Error: empty buffer");
                     } else Console.WriteLine("Error: key already exists");
                 }
             }
             else if (args[0].Equals("add-lit") && args.Length == 3){
-                if (AddMacro(args[1], args[2])){
-                    Clipboard.SetText(args[2]);
-                    Console.WriteLine("Added " + args[2] + " for " + args[1]);
+                var arabic = args[2];
+                var key = args[1];
+                string badSubstring;
+                if (ContainsDelimiter(key, out badSubstring)) Console.WriteLine("Error: key should not contain the delimiter \"" + badSubstring + "\"");
+                else if (AddMacro(key, arabic)){
+                    if (!string.IsNullOrEmpty(arabic)) {
+                        Clipboard.SetText(arabic);
+                        Console.WriteLine("Added " + arabic + " for " + key);
+                    } else Console.WriteLine("Error: empty buffer");
                 } else Console.WriteLine("Error: key already exists");
             }
             else if (args[0].Equals("remove") && args.Length == 2){
@@ -270,8 +310,10 @@ namespace Arabize
                 var arabic = Arabize(string.Join(" ", args));
                 if (arabic == null) Console.WriteLine("Error: unable to parse mappings");
                 else {
-                    Clipboard.SetText(arabic);
-                    Console.WriteLine("Copied: " + arabic);
+                    if (!string.IsNullOrEmpty(arabic)) {
+                        Clipboard.SetText(arabic);
+                        Console.WriteLine("Copied: " + arabic);
+                    } else Console.WriteLine("Error: empty buffer");
                 }
             }
         }

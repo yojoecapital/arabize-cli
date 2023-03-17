@@ -34,34 +34,37 @@ This copies this text:
 
 Use these sequences at the end of a transliterated letter to add a diacritic ligature to the Arabic Unicode letter.
 
-| Sequence |      Diacritic       |
-| :------: | :------------------: |
-|   `''`   | &#x064B;  *fathatan* |
-|   `'`    |  &#x064E;  *fatha*   |
-|   `--`   | &#x064D;  *kasratan* |
-|   `-`    |  &#x0650;  *kasra*   |
-|   `%%`   | &#x064C;  *dammatan* |
-|   `%`    |  &#x064F;  *damma*   |
-|   `$`    |  &#x0651;  *shadda*  |
-|   `#`    |  &#x0652;  *sukun*   |
+| Sequence |        Diacritic        |
+| :------: | :---------------------: |
+|   `''`   |  &#x064B;  *fathatan*   |
+|   `'`    |    &#x064E;  *fatha*    |
+|   `--`   |  &#x064D;  *kasratan*   |
+|   `-`    |    &#x0650;  *kasra*    |
+|   `%%`   |  &#x064C;  *dammatan*   |
+|   `%`    |    &#x064F;  *damma*    |
+|   `$`    |   &#x0651;  *shadda*    |
+|   `#`    |    &#x0652;  *sukun*    |
+|   `@`    | &#x654;  *hamza above*  |
+|   `.@`   | &#x655;  *hamza below*  |
+|   `~`    | &#x653;  *maddah above* |
 
 Note that diacritics also act as delimiters between letters. 
 
 For example:
 
 ```
-$ arabize alif.h-noon$'alif lam-lam$'haa- waw' alif.h-noon$'alif alif.h-lam'ya#haa- ra'alif_jeem-ayn%waw_noon'
+$ arabize alif.@-noon$'alif lam-lam$'haa- waw'alif.@-noon$'alif alif.@-lam'ya#haa- ra'alif_jeem-ayn%waw_noon'
 ```
 
 Will copy this text:
 
-> إِنَّا لِلَّهِ وَ إِنَّا إِلَيْهِ رَاجِعُونَ
+> إِنَّا لِلَّهِ وَإِنَّا إِلَيْهِ رَاجِعُونَ
 
 ## How to Use Macros:
 
-Use `arabize add inna alif.h-noon$'alif` to add إِنَّا in place of `inna`.
+Use `arabize add inna alif.@-noon$'alif` to add إِنَّا in place of `inna`.
 
-Use `arabize add-lit ArRahman الرّحْمَان ` to add الرّحْمَان using its literal Unicode characters in place of `ArRahman`.
+Use `arabize add-lit ArRahman الرَّحْمَان` to add الرَّحْمَان using its literal Unicode characters in place of `ArRahman`.
 
 Use `arabize remove inna` to remove the macro `inna`.
 
