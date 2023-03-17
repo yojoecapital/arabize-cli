@@ -10,6 +10,7 @@
   <row key="@''" value="&#x654;&#x64B;" name="hamza above fathatan" />
   <row key="@--" value="&#x654;&#x64D;" name="hamza above kasratan" />
   <row key="@%%" value="&#x654;&#x64C;" name="hamza above dammatan" />
+  <row key=".@" value="&#x655;" name="hamza below" />
   <row key="@#" value="&#x654;&#x652;" name="hamza above sukun" />
   <row key="@'" value="&#x654;&#x64E;" name="hamza above fatha" />
   <row key="@-" value="&#x654;&#x650;" name="hamza above kasra" />
