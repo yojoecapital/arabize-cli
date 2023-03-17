@@ -12,12 +12,15 @@ namespace Arabize
     static class Program
     {
         static readonly string lettersFileName = "letters.xml";
+        static readonly string DiacriticsFileName = "diacritics.xml";
         static readonly string macrosFileName = "macros.xml";
 
         static string LettersFilePath{
-            get{
-                return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, lettersFileName);
-            }
+            get => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, lettersFileName);
+        }
+
+        static string DiacriticsFilePath{
+            get => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, diacriticsFileName);
         }
 
         static string MacrosFilePath{
@@ -80,7 +83,7 @@ namespace Arabize
             return d[m, n];
         }
 
-        static bool Add(string key, string value) 
+        static bool AddMacro(string key, string value) 
         {
             XDocument xml = XDocument.Load(MacrosFilePath);
     
@@ -99,7 +102,7 @@ namespace Arabize
             return true;
         }
 
-        public static string Remove(string key)
+        public static string RemoveMacro(string key)
         {
             XDocument xml = XDocument.Load(MacrosFilePath);
     
@@ -109,74 +112,27 @@ namespace Arabize
                 string value = (string)rowToRemove.Attribute("value"); 
                 rowToRemove.Remove(); 
                 xml.Save(MacrosFilePath); 
-                return value; // return value attribute of removed row element
+                return value; 
             }
             else return null;
         }  
 
-        static string TrimForSymbol(string letter, out string symbol)
+        static string TrimForDiacritic(Dictionary<string, string> mapping, string letter, out string diacritic)
         {
-            symbol = string.Empty;
-            var letterTrim = letter;
-            if (letterTrim.EndsWith("$'")) // shadda fatha
+            diacritic = string.Empty;
+            foreach (var key in mapping.Keys)
             {
-                symbol = "\u0651\u064E";
-                letterTrim = letterTrim.TrimEnd('\'').TrimEnd('$');
+                if (letterTrim.EndsWith(key))
+                {
+                    diacritic = mapping[key];
+                    if (!letter.EndsWith(key)) return letter;
+                    else return letter.Remove(letter.LastIndexOf(key));
+                }
             }
-            else if (letterTrim.EndsWith("$-")) // shadda kasra
-            {
-                symbol = "\u0651\u0650";
-                letterTrim = letterTrim.TrimEnd('-').TrimEnd('$');
-            }
-            else if (letterTrim.EndsWith("$%")) // shadda damma
-            {
-                symbol = "\u0651\u064F";
-                letterTrim = letterTrim.TrimEnd('%').TrimEnd('$');
-            }
-            else if (letterTrim.EndsWith("$")) // shadda
-            {
-                symbol = "\u0651";
-                letterTrim = letterTrim.TrimEnd('$');
-            }
-            else if (letterTrim.EndsWith("''")) // fathatan
-            {
-                symbol = "\u064B";
-                letterTrim = letterTrim.TrimEnd('\'').TrimEnd('\'');
-            }
-            else if (letterTrim.EndsWith("'")) // fatha
-            {
-                symbol = "\u064E";
-                letterTrim = letterTrim.TrimEnd('\'');
-            }
-            else if (letterTrim.EndsWith("--")) // kasratan
-            {
-                symbol = "\u064D";
-                letterTrim = letterTrim.TrimEnd('-').TrimEnd('-');
-            }
-            else if (letterTrim.EndsWith("-")) // kasra
-            {
-                symbol = "\u0650";
-                letterTrim = letterTrim.TrimEnd('-');
-            }
-            else if (letterTrim.EndsWith("%%")) // dammatan
-            {
-                symbol = "\u064C";
-                letterTrim = letterTrim.TrimEnd('%').TrimEnd('%');
-            }
-            else if (letterTrim.EndsWith("%")) // damma
-            {
-                symbol = "\u064F";
-                letterTrim = letterTrim.TrimEnd('%');
-            }
-            else if (letterTrim.EndsWith("#")) // sukun
-            {
-                symbol = "\u0652";
-                letterTrim = letterTrim.TrimEnd('#');
-            }
-            return letterTrim;
+            return letter;
         }
 
-        static int IndexOfFirstDelimiters(string input, List<string> delimiters)
+        static int IndexOfFirstDelimiters(string input, IEnumerable<string> delimiters)
         {
             int start = 0;
             while (start < input.Length)
@@ -191,7 +147,7 @@ namespace Arabize
             return -1;
         }
         
-        static IEnumerable<string> SplitWithDelimiters(string input, List<string> delimiters)
+        static IEnumerable<string> SplitWithDelimiters(string input, IEnumerable<string> delimiters)
         {
             int split;
             while ((split = IndexOfFirstDelimiters(input, delimiters)) != -1)
@@ -225,14 +181,13 @@ namespace Arabize
                 var arabicWord = string.Empty;
                 foreach (var letter in letters)
                 {
-                    var delimiters = new List<string>(){"$'", "$-", "$%", "$", "''", "'", "--", "-", "%%", "%", "#"};
-                    foreach (var splitLetter in SplitWithDelimiters(letter, delimiters))
+                    foreach (var splitLetter in SplitWithDelimiters(letter, Diacritics.Values))
                     {
-                        string symbol;
-                        var key = FindClosestKey(mapping, TrimForSymbol(splitLetter, out symbol));
+                        string diacritic;
+                        var key = FindClosestKey(mapping, TrimForDiacritic(splitLetter, out diacritic));
                         if (mapping.ContainsKey(key))
                         {
-                            arabicWord += mapping[key] + symbol;
+                            arabicWord += mapping[key] + diacritic;
                         }
                     }
                 }
@@ -242,9 +197,17 @@ namespace Arabize
             return string.Join(" ", arabic);
         }
 
-        static Dictionary<string, string> GetMacros() { return GetDictionary(MacrosFilePath); }
+        static Dictionary<string, string> Macros {
+            get => GetDictionary(MacrosFilePath); 
+        }
 
-        static Dictionary<string, string> GetLetters() { return GetDictionary(LettersFilePath); }
+        static Dictionary<string, string> Diacritics { 
+            get => GetDictionary(DiacriticsFilePath); 
+        }
+
+        static Dictionary<string, string> Letters { 
+            get => GetDictionary(LettersFilePath); 
+        }
 
         static Dictionary<string, string> GetDictionary(string filePath)
         {
@@ -266,7 +229,7 @@ namespace Arabize
                 return;
             }
             else if (args[0].Equals("macros") && args.Length == 1){
-                var macros = GetMacros();
+                var macros = Macros;
                 if (macros == null) Console.WriteLine("Error: unable to parse mappings");
                 else {
                     foreach (var key in macros.Keys)
@@ -274,7 +237,7 @@ namespace Arabize
                 }
             }
             else if (args[0].Equals("letters") && args.Length == 1){
-                var letters = GetLetters();
+                var letters = Letters;
                 if (letters == null) Console.WriteLine("Error: unable to parse mappings");
                 else {
                     foreach (var key in letters.Keys)
@@ -285,20 +248,20 @@ namespace Arabize
                 var arabic = Arabize(args[2]);
                 if (arabic == null) Console.WriteLine("Error: unable to parse mappings");
                 else {
-                    if (Add(args[1], arabic)){
+                    if (AddMacro(args[1], arabic)){
                         Clipboard.SetText(arabic);
                         Console.WriteLine("Added " + arabic + " for " + args[1]);
                     } else Console.WriteLine("Error: key already exists");
                 }
             }
             else if (args[0].Equals("add-lit") && args.Length == 3){
-                if (Add(args[1], args[2])){
+                if (AddMacro(args[1], args[2])){
                     Clipboard.SetText(args[2]);
                     Console.WriteLine("Added " + args[2] + " for " + args[1]);
                 } else Console.WriteLine("Error: key already exists");
             }
             else if (args[0].Equals("remove") && args.Length == 2){
-                var value = Remove(args[1]);
+                var value = RemoveMacro(args[1]);
                 if (value != null) Console.WriteLine("Removed " +  args[1] + " for " + value);
                 else Console.WriteLine("Error: unable to find " +  args[1]);
             }
