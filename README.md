@@ -4,7 +4,7 @@ This is a command to translate Arabic-transliterated letters into Arabic Unicode
 
 To access it easier, place the path of the `Arabize` directory in `Path` for System Variables.
 
-To recompile, use `csc arabize-script.c`.
+To recompile, use `csc arabize.cs`.
 
 ## How to use:
 
