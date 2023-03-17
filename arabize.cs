@@ -118,7 +118,27 @@ namespace Arabize
         {
             symbol = string.Empty;
             var letterTrim = letter;
-            if (letterTrim.EndsWith("''")) // fathatan
+            if (letterTrim.EndsWith("$'")) // shadda fatha
+            {
+                symbol = "\u0651\u064E";
+                letterTrim = letterTrim.TrimEnd('\'').TrimEnd('$');
+            }
+            else if (letterTrim.EndsWith("$-")) // shadda kasra
+            {
+                symbol = "\u0651\u0650";
+                letterTrim = letterTrim.TrimEnd('-').TrimEnd('$');
+            }
+            else if (letterTrim.EndsWith("$%")) // shadda damma
+            {
+                symbol = "\u0651\u064F";
+                letterTrim = letterTrim.TrimEnd('%').TrimEnd('$');
+            }
+            else if (letterTrim.EndsWith("$")) // shadda
+            {
+                symbol = "\u0651";
+                letterTrim = letterTrim.TrimEnd('$');
+            }
+            else if (letterTrim.EndsWith("''")) // fathatan
             {
                 symbol = "\u064B";
                 letterTrim = letterTrim.TrimEnd('\'').TrimEnd('\'');
@@ -148,17 +168,38 @@ namespace Arabize
                 symbol = "\u064F";
                 letterTrim = letterTrim.TrimEnd('%');
             }
-            else if (letterTrim.EndsWith("$")) // shadda
-            {
-                symbol = "\u0651";
-                letterTrim = letterTrim.TrimEnd('$');
-            }
             else if (letterTrim.EndsWith("#")) // sukun
             {
                 symbol = "\u0652";
                 letterTrim = letterTrim.TrimEnd('#');
             }
             return letterTrim;
+        }
+
+        static int IndexOfFirstDelimiters(string input, List<string> delimiters)
+        {
+            int start = 0;
+            while (start < input.Length)
+            {
+                foreach (string delimiter in delimiters)
+                {
+                    if (input.Substring(start).StartsWith(delimiter))
+                        return start + delimiter.Length;
+                }
+                start++;
+            }
+            return -1;
+        }
+        
+        static IEnumerable<string> SplitWithDelimiters(string input, List<string> delimiters)
+        {
+            int split;
+            while ((split = IndexOfFirstDelimiters(input, delimiters)) != -1)
+            {
+                yield return input.Substring(0, split);
+                input = input.Substring(split);
+            }
+            if (!string.IsNullOrEmpty(input)) yield return input;
         }
 
         static string Arabize(string transliteration)
@@ -184,11 +225,15 @@ namespace Arabize
                 var arabicWord = string.Empty;
                 foreach (var letter in letters)
                 {
-                    string symbol;
-                    var key = FindClosestKey(mapping, TrimForSymbol(letter, out symbol));
-                    if (mapping.ContainsKey(key))
+                    var delimiters = new List<string>(){"$'", "$-", "$%", "$", "''", "'", "--", "-", "%%", "%", "#"};
+                    foreach (var splitLetter in SplitWithDelimiters(letter, delimiters))
                     {
-                        arabicWord += mapping[key] + symbol;
+                        string symbol;
+                        var key = FindClosestKey(mapping, TrimForSymbol(splitLetter, out symbol));
+                        if (mapping.ContainsKey(key))
+                        {
+                            arabicWord += mapping[key] + symbol;
+                        }
                     }
                 }
                 arabic.Add(arabicWord);

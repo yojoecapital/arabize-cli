@@ -28,7 +28,7 @@
   <row value="و" key="waw" />
   <row value="ي" key="ya" />
   <row value="ء" key="hamza" />
-  <row key="alif'h" value="أ" />
-  <row key="alif-h" value="إ" />
+  <row key="alif^h" value="أ" />
+  <row key="alif.h" value="إ" />
   <row key="alif-med" value="آ" />
 </root>

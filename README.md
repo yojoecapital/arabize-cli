@@ -23,44 +23,46 @@ This copies this text:
 Use `_` characters to delimit letters. Use space characters to delimit words.
 
 ```
-$ arabize lam_alif alif_lam_haa alif_lam_alif alif_lam_lam_haa
+$ arabize lam_alif alif.h_lam_haa alif.h_lam_alif alif_lam_lam_haa
 ```
 
 This copies this text:
 
-> لا اله الا الله 
+> لا إله إلا الله
 
 ## How to Use Diacritics:
 
 Use these sequences at the end of a transliterated letter to add a diacritic ligature to the Arabic Unicode letter.
 
-| Sequence | Diacritic |
-| :------: | :-------: |
-|   `''`   | &#x064B;  |
-|   `'`    | &#x064E;  |
-|   `--`   | &#x064D;  |
-|   `-`    | &#x0650;  |
-|   `%%`   | &#x064C;  |
-|   `%`    | &#x064F;  |
-|   `$`    | &#x0651;  |
-|   `#`    | &#x0652;  |
+| Sequence |      Diacritic       |
+| :------: | :------------------: |
+|   `''`   | &#x064B;  *fathatan* |
+|   `'`    |  &#x064E;  *fatha*   |
+|   `--`   | &#x064D;  *kasratan* |
+|   `-`    |  &#x0650;  *kasra*   |
+|   `%%`   | &#x064C;  *dammatan* |
+|   `%`    |  &#x064F;  *damma*   |
+|   `$`    |  &#x0651;  *shadda*  |
+|   `#`    |  &#x0652;  *sukun*   |
+
+Note that diacritics also act as delimiters between letters. 
 
 For example:
 
 ```
-$ arabize alif-h-_noon$_alif lam-_lam$_haa- waw' alif-h-_noon$_alif alif-h-_lam_yah#_haa- ra'_alif_jeem-_ayn%_waw_noon'
+$ arabize alif.h-noon$'alif lam-lam$'haa- waw' alif.h-noon$'alif alif.h-lam'ya#haa- ra'alif_jeem-ayn%waw_noon'
 ```
 
 Will copy this text:
 
-> إِنّا لِلّهِ وَ إِنّا إِليْهِ رَاجِعُونَ
+> إِنَّا لِلَّهِ وَ إِنَّا إِلَيْهِ رَاجِعُونَ
 
 ## How to Use Macros:
 
-Use `arabize add laa lam_alim` to add لا in place of `laa`.
+Use `arabize add inna alif.h-noon$'alif` to add إِنَّا in place of `inna`.
 
-Use `arabize add-lit laa لا ` to add لا using its literal Unicode characters in place of `laa`.
+Use `arabize add-lit ArRahman الرّحْمَان ` to add الرّحْمَان using its literal Unicode characters in place of `ArRahman`.
 
-Use `arabize remove laa` to remove the macro.
+Use `arabize remove inna` to remove the macro `inna`.
 
 Use `arabize macros` to get a list of all current macros.
