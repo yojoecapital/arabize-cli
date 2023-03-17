@@ -23,7 +23,7 @@ This copies this text:
 Use `_` characters to delimit letters. Use space characters to delimit words.
 
 ```
-$ arabize lam_alif alif.h_lam_haa alif.h_lam_alif alif_lam_lam_haa
+$ arabize lam_alif alif.@_lam_haa alif.@_lam_alif alif_lam_lam_haa
 ```
 
 This copies this text:
