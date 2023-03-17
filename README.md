@@ -28,7 +28,7 @@ $ arabize lam_alif alif.@_lam_haa alif.@_lam_alif alif_lam_lam_haa
 
 This copies this text:
 
-> لا إله إلا الله
+> لا إله إلا الله
 
 ## How to Use Diacritics:
 
