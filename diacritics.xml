@@ -1,4 +1,5 @@
 <root>
+  <!-- these rows should be sorted in decreasing order of the length of their keys -->
   <row key=".@''" value="&#x655;&#x64B;" name="hamza below fathatan" />
   <row key=".@--" value="&#x655;&#x64D;" name="hamza below kasratan" />
   <row key=".@%%" value="&#x655;&#x64C;" name="hamza below dammatan" />
