@@ -28,6 +28,7 @@
   <row value="و" key="waw" />
   <row value="ي" key="ya" />
   <row value="ء" key="hamza" />
+  <row value="&#1649;" key="wasla" />
   <row value="ة" key="marbuta" />
   <row value="ى" key="maksura" />
   <row value="◌" key="(?)" />
