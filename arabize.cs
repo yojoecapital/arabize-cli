@@ -248,10 +248,8 @@ namespace Arabize
             else return false;
         }
 
-        [STAThreadAttribute]
-        static void Main(string[] args)
+        private static void ProcessArgs(string[] args)
         {
-            Console.OutputEncoding = System.Text.Encoding.UTF8;
             if (args.Length < 1){
                 Console.WriteLine("Usage: arabize.exe <transliterated Arabic>");
                 return;
@@ -314,6 +312,26 @@ namespace Arabize
                         Clipboard.SetText(arabic);
                         Console.WriteLine("Copied: " + arabic);
                     } else Console.WriteLine("Error: empty buffer");
+                }
+            }
+        }
+
+        [STAThreadAttribute]
+        static void Main(string[] args)
+        {
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
+            if (args.Length > 0)
+            ProcessArgs(args);
+            else
+            {
+                string input;
+                while (true)
+                {
+                    Console.Write("> ");
+                    input = Console.ReadLine();
+                    if (input == "q" || input == "quit") return;
+                    var argsArray = input.Split(new char[]{' '}, StringSplitOptions.RemoveEmptyEntries);
+                    ProcessArgs(argsArray);
                 }
             }
         }
