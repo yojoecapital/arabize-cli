@@ -320,6 +320,7 @@ namespace Arabize
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
+
             if (args.Length > 0)
                 ProcessArgs(args);
             else
@@ -329,7 +330,7 @@ namespace Arabize
                 {
                     Console.Write("> ");
                     input = Console.ReadLine();
-                    if (input.Equals("cls")) 
+                    if (input.Equals("cls") || input.Equals("clear")) 
                     {
                         Console.Clear();
                         continue;
