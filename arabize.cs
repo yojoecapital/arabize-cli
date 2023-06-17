@@ -321,7 +321,7 @@ namespace Arabize
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             if (args.Length > 0)
-            ProcessArgs(args);
+                ProcessArgs(args);
             else
             {
                 string input;
@@ -329,7 +329,12 @@ namespace Arabize
                 {
                     Console.Write("> ");
                     input = Console.ReadLine();
-                    if (input == "q" || input == "quit") return;
+                    if (input.Equals("cls")) 
+                    {
+                        Console.Clear();
+                        continue;
+                    }
+                    else if (input == "q" || input == "quit") return;
                     var argsArray = input.Split(new char[]{' '}, StringSplitOptions.RemoveEmptyEntries);
                     ProcessArgs(argsArray);
                 }
