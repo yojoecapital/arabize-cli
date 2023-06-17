@@ -1,11 +1,12 @@
-using System;
+﻿using System;
 using System.IO;
-using System.Text;
 using System.Linq;
 using System.Xml.Linq;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using System.Text.RegularExpressions;
+using Newtonsoft.Json;
+using System.Collections;
+using Newtonsoft.Json.Linq;
 
 namespace Arabize
 {
@@ -13,47 +14,62 @@ namespace Arabize
     {
         static readonly string lettersFileName = "letters.xml";
         static readonly string diacriticsFileName = "diacritics.xml";
-        static readonly string macrosFileName = "macros.xml";
+        static readonly string macrosFileName = "macros.json";
 
-        static string LettersFilePath {
+        static string LettersFilePath
+        {
             get { return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, lettersFileName); }
         }
 
-        static string DiacriticsFilePath {
+        static string DiacriticsFilePath
+        {
             get { return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, diacriticsFileName); }
         }
 
-        static string MacrosFilePath{
-            get{
+        static string MacrosFilePath
+        {
+            get
+            {
                 var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, macrosFileName);
                 if (!File.Exists(filePath))
                 {
-                    XDocument xml = new XDocument(new XElement("root"));
-                    xml.Save(filePath);
+                    File.WriteAllText(filePath, "{}");
                 }
                 return filePath;
             }
         }
 
-        static Dictionary<string, string> Macros {
-            get { return GetDictionary(MacrosFilePath); } 
+        static Dictionary<string, string> Macros
+        {
+            get {
+                string json = File.ReadAllText(MacrosFilePath);
+                return JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+            }
+            set {
+                string json = JsonConvert.SerializeObject(value);
+                File.WriteAllText(MacrosFilePath, json);
+            }
         }
 
-        static Dictionary<string, string> Diacritics {
+        static Dictionary<string, string> Diacritics
+        {
             get { return GetDictionary(DiacriticsFilePath); }
         }
 
-        static Dictionary<string, string> Letters {
+        static Dictionary<string, string> Letters
+        {
             get { return GetDictionary(LettersFilePath); }
-        } 
+        }
 
         static Dictionary<string, string> GetDictionary(string filePath)
         {
-            try{
+            try
+            {
                 return XDocument.Load(filePath).Root.Elements()
                     .ToDictionary(x => x.Attribute("key").Value, x => x.Attribute("value").Value);
             }
-            catch {
+            catch
+            {
                 return null;
             }
         }
@@ -106,39 +122,35 @@ namespace Arabize
             return d[m, n];
         }
 
-        static bool AddMacro(string key, string value) 
+        static bool AddMacro(string key, string value)
         {
-            XDocument xml = XDocument.Load(MacrosFilePath);
-    
+            var mapping = Macros;
+
             // Check if key already exists in XML
-            if (xml.Descendants("row").Any(row => row.Attribute("key").Value == key))
+            if (mapping.ContainsKey(key))
                 return false;
             else if (XDocument.Load(LettersFilePath).Root.Elements().Any(row => row.Attribute("key").Value == key))
                 return false;
-            
-            XElement newRow = new XElement("row",
-                              new XAttribute("key", key),
-                              new XAttribute("value", value.Trim()));
-            
-            xml.Element("root").Add(newRow);
-            xml.Save(MacrosFilePath);
+
+            mapping[key] = value.Trim();
+
+            Macros = mapping;
             return true;
         }
 
         public static string RemoveMacro(string key)
         {
-            XDocument xml = XDocument.Load(MacrosFilePath);
-    
-            var rowToRemove = xml.Descendants("row").FirstOrDefault(x => (string)x.Attribute("key") == key);            
-            if (rowToRemove != null)
+            var mapping = Macros;
+
+            if (mapping.ContainsKey(key))
             {
-                string value = (string)rowToRemove.Attribute("value"); 
-                rowToRemove.Remove(); 
-                xml.Save(MacrosFilePath); 
-                return value; 
+                var value = mapping[key];
+                mapping.Remove(key);
+                Macros = mapping;
+                return value;
             }
             else return null;
-        }  
+        }
 
         static string TrimForDiacritic(string letter, out string diacritic)
         {
@@ -170,7 +182,7 @@ namespace Arabize
             }
             return -1;
         }
-        
+
         static IEnumerable<string> SplitWithDelimiters(string input, IEnumerable<string> delimiters)
         {
             int split;
@@ -188,11 +200,10 @@ namespace Arabize
             try
             {
                 mapping = Letters;
-                var macros = XDocument.Load(MacrosFilePath);
-                foreach (var row in macros.Root.Elements())
-                    mapping[row.Attribute("key").Value] = row.Attribute("value").Value;
+                var macros = Macros;
+                macros.ToList().ForEach(x => mapping.Add(x.Key, x.Value));
             }
-            catch 
+            catch
             {
                 return null;
             }
@@ -204,14 +215,13 @@ namespace Arabize
                 var letters = word.Split('_');
                 var arabicWord = string.Empty;
                 foreach (var letter in letters) foreach (var splitLetter in SplitWithDelimiters(letter, diacriticsKeys))
-                {
-                    string diacritic;
-                    var key = FindClosestKey(mapping, TrimForDiacritic(splitLetter, out diacritic));
-                    if (mapping.ContainsKey(key))
                     {
-                        arabicWord += mapping[key] + diacritic;
+                        var key = FindClosestKey(mapping, TrimForDiacritic(splitLetter, out string diacritic));
+                        if (mapping.ContainsKey(key))
+                        {
+                            arabicWord += mapping[key] + diacritic;
+                        }
                     }
-                }
                 arabic.Add(arabicWord);
             }
 
@@ -233,15 +243,18 @@ namespace Arabize
         {
             string tmp = null;
             substring = null;
-            if (Diacritics.Keys.Any(diacritic => ContainsAndAssign(input, diacritic, out tmp))) {
+            if (Diacritics.Keys.Any(diacritic => ContainsAndAssign(input, diacritic, out tmp)))
+            {
                 substring = tmp;
                 return true;
             }
-            else if (input.Contains("_")){
+            else if (input.Contains("_"))
+            {
                 substring = "_";
                 return true;
             }
-            else if (input.Contains(" ")){
+            else if (input.Contains(" "))
+            {
                 substring = " ";
                 return true;
             }
@@ -250,73 +263,94 @@ namespace Arabize
 
         private static void ProcessArgs(string[] args)
         {
-            if (args.Length < 1){
+            if (args.Length < 1)
+            {
                 Console.WriteLine("Usage: arabize.exe <transliterated Arabic>");
                 return;
             }
-            else if ((args[0].Equals("macros") || args[0].Equals("m")) && args.Length == 1){
+            else if ((args[0].Equals("macros") || args[0].Equals("m")) && args.Length == 1)
+            {
                 var macros = Macros;
                 if (macros == null) Console.WriteLine("Error: unable to parse mappings");
-                else {
+                else
+                {
+                    if (macros.Count == 0) Console.WriteLine("<empty>");
                     foreach (var key in macros.Keys)
                         Console.WriteLine(key + " \u2192 " + macros[key]);
                 }
             }
-            else if ((args[0].Equals("letters") || args[0].Equals("l")) && args.Length == 1){
+            else if ((args[0].Equals("letters") || args[0].Equals("l")) && args.Length == 1)
+            {
                 var letters = Letters;
                 if (letters == null) Console.WriteLine("Error: unable to parse mappings");
-                else {
+                else
+                {
                     foreach (var key in letters.Keys)
                         Console.WriteLine(key + " \u2192 " + letters[key]);
                 }
             }
-            else if ((args[0].Equals("add") || args[0].Equals("a")) && args.Length == 3){
+            else if ((args[0].Equals("add") || args[0].Equals("a")) && args.Length == 3)
+            {
                 var arabic = Arabize(args[2]);
                 if (arabic == null) Console.WriteLine("Error: unable to parse mappings");
-                else {
+                else
+                {
                     var key = args[1];
                     string badSubstring;
                     if (ContainsDelimiter(key, out badSubstring)) Console.WriteLine("Error: key should not contain the delimiter \"" + badSubstring + "\"");
-                    else if (AddMacro(key, arabic)){
-                        if (!string.IsNullOrEmpty(arabic)) 
+                    else if (AddMacro(key, arabic))
+                    {
+                        if (!string.IsNullOrEmpty(arabic))
                         {
                             Clipboard.SetText(arabic);
-                            Console.WriteLine("Added " + arabic + " for " + key);
-                        } else Console.WriteLine("Error: empty buffer");
-                    } else Console.WriteLine("Error: key already exists");
+                            Console.WriteLine(key + " \u2192 " + arabic);
+                        }
+                        else Console.WriteLine("Error: empty buffer");
+                    }
+                    else Console.WriteLine("Error: key already exists");
                 }
             }
-            else if ((args[0].Equals("add-lit") || args[0].Equals("al")) && args.Length == 3){
+            else if ((args[0].Equals("add-lit") || args[0].Equals("al")) && args.Length == 3)
+            {
                 var arabic = args[2];
                 var key = args[1];
                 string badSubstring;
                 if (ContainsDelimiter(key, out badSubstring)) Console.WriteLine("Error: key should not contain the delimiter \"" + badSubstring + "\"");
-                else if (AddMacro(key, arabic)){
-                    if (!string.IsNullOrEmpty(arabic)) {
+                else if (AddMacro(key, arabic))
+                {
+                    if (!string.IsNullOrEmpty(arabic))
+                    {
                         Clipboard.SetText(arabic);
-                        Console.WriteLine("Added " + arabic + " for " + key);
-                    } else Console.WriteLine("Error: empty buffer");
-                } else Console.WriteLine("Error: key already exists");
+                        Console.WriteLine(key + " \u2192 " + arabic);
+                    }
+                    else Console.WriteLine("Error: empty buffer");
+                }
+                else Console.WriteLine("Error: key already exists");
             }
-            else if ((args[0].Equals("remove") || args[0].Equals("r")) && args.Length == 2){
-                var value = RemoveMacro(args[1]);
-                if (value != null) Console.WriteLine("Removed " +  value + " for " + args[1]);
-                else Console.WriteLine("Error: unable to find " +  args[1]);
+            else if ((args[0].Equals("remove") || args[0].Equals("r")) && args.Length == 2)
+            {
+                var key = args[1];
+                var value = RemoveMacro(key);
+                if (value != null) Console.WriteLine(key + " \u2260 " + value);
+                else Console.WriteLine("Error: unable to find " + key);
             }
             else
             {
                 var arabic = Arabize(string.Join(" ", args));
                 if (arabic == null) Console.WriteLine("Error: unable to parse mappings");
-                else {
-                    if (!string.IsNullOrEmpty(arabic)) {
+                else
+                {
+                    if (!string.IsNullOrEmpty(arabic))
+                    {
                         Clipboard.SetText(arabic);
-                        Console.WriteLine("Copied: " + arabic);
-                    } else Console.WriteLine("Error: empty buffer");
+                        Console.WriteLine(arabic);
+                    }
+                    else Console.WriteLine("Error: empty buffer");
                 }
             }
         }
 
-        [STAThreadAttribute]
+        [STAThread]
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.Unicode;
@@ -331,13 +365,13 @@ namespace Arabize
                 {
                     Console.Write("> ");
                     input = Console.ReadLine().Trim();
-                    if (input.Equals("cls") || input.Equals("clear")) 
+                    if (input.Equals("cls") || input.Equals("clear"))
                     {
                         Console.Clear();
                         continue;
                     }
                     else if (input.Equals("q") || input.Equals("quit")) return;
-                    var argsArray = input.Split(new char[]{' '}, StringSplitOptions.RemoveEmptyEntries);
+                    var argsArray = input.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                     ProcessArgs(argsArray);
                 }
             }
