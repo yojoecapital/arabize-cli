@@ -329,13 +329,13 @@ namespace Arabize
                 while (true)
                 {
                     Console.Write("> ");
-                    input = Console.ReadLine();
+                    input = Console.ReadLine().Trim();
                     if (input.Equals("cls") || input.Equals("clear")) 
                     {
                         Console.Clear();
                         continue;
                     }
-                    else if (input == "q" || input == "quit") return;
+                    else if (input.Equals("q") || input.Equals("quit")) return;
                     var argsArray = input.Split(new char[]{' '}, StringSplitOptions.RemoveEmptyEntries);
                     ProcessArgs(argsArray);
                 }
