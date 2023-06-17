@@ -254,7 +254,7 @@ namespace Arabize
                 Console.WriteLine("Usage: arabize.exe <transliterated Arabic>");
                 return;
             }
-            else if (args[0].Equals("macros") && args.Length == 1){
+            else if ((args[0].Equals("macros") || args[0].Equals("m")) && args.Length == 1){
                 var macros = Macros;
                 if (macros == null) Console.WriteLine("Error: unable to parse mappings");
                 else {
@@ -262,7 +262,7 @@ namespace Arabize
                         Console.WriteLine(key + " \u2192 " + macros[key]);
                 }
             }
-            else if (args[0].Equals("letters") && args.Length == 1){
+            else if ((args[0].Equals("letters") || args[0].Equals("l")) && args.Length == 1){
                 var letters = Letters;
                 if (letters == null) Console.WriteLine("Error: unable to parse mappings");
                 else {
@@ -270,7 +270,7 @@ namespace Arabize
                         Console.WriteLine(key + " \u2192 " + letters[key]);
                 }
             }
-            else if (args[0].Equals("add") && args.Length == 3){
+            else if ((args[0].Equals("add") || args[0].Equals("a")) && args.Length == 3){
                 var arabic = Arabize(args[2]);
                 if (arabic == null) Console.WriteLine("Error: unable to parse mappings");
                 else {
@@ -286,7 +286,7 @@ namespace Arabize
                     } else Console.WriteLine("Error: key already exists");
                 }
             }
-            else if (args[0].Equals("add-lit") && args.Length == 3){
+            else if ((args[0].Equals("add-lit") || args[0].Equals("al")) && args.Length == 3){
                 var arabic = args[2];
                 var key = args[1];
                 string badSubstring;
@@ -298,9 +298,9 @@ namespace Arabize
                     } else Console.WriteLine("Error: empty buffer");
                 } else Console.WriteLine("Error: key already exists");
             }
-            else if (args[0].Equals("remove") && args.Length == 2){
+            else if ((args[0].Equals("remove") || args[0].Equals("r")) && args.Length == 2){
                 var value = RemoveMacro(args[1]);
-                if (value != null) Console.WriteLine("Removed " +  args[1] + " for " + value);
+                if (value != null) Console.WriteLine("Removed " +  value + " for " + args[1]);
                 else Console.WriteLine("Error: unable to find " +  args[1]);
             }
             else
