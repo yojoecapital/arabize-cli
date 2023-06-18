@@ -263,12 +263,7 @@ namespace Arabize
 
         private static void ProcessArgs(string[] args)
         {
-            if (args.Length < 1)
-            {
-                Console.WriteLine("Usage: arabize.exe <transliterated Arabic>");
-                return;
-            }
-            else if ((args[0].Equals("macros") || args[0].Equals("m")) && args.Length == 1)
+            if (args.Length == 1 && (args[0].Equals("macros") || args[0].Equals("m")))
             {
                 var macros = Macros;
                 if (macros == null) Console.WriteLine("Error: unable to parse mappings");
@@ -279,7 +274,7 @@ namespace Arabize
                         Console.WriteLine(key + " \u2192 " + macros[key]);
                 }
             }
-            else if ((args[0].Equals("letters") || args[0].Equals("l")) && args.Length == 1)
+            else if (args.Length == 1 && (args[0].Equals("letters") || args[0].Equals("l")))
             {
                 var letters = Letters;
                 if (letters == null) Console.WriteLine("Error: unable to parse mappings");
@@ -289,7 +284,7 @@ namespace Arabize
                         Console.WriteLine(key + " \u2192 " + letters[key]);
                 }
             }
-            else if ((args[0].Equals("add") || args[0].Equals("a")) && args.Length == 3)
+            else if (args.Length == 3 && (args[0].Equals("add") || args[0].Equals("a")))
             {
                 var arabic = Arabize(args[2]);
                 if (arabic == null) Console.WriteLine("Error: unable to parse mappings");
@@ -310,7 +305,7 @@ namespace Arabize
                     else Console.WriteLine("Error: key already exists");
                 }
             }
-            else if ((args[0].Equals("add-lit") || args[0].Equals("al")) && args.Length == 3)
+            else if (args.Length == 3 && (args[0].Equals("add-lit") || args[0].Equals("al")))
             {
                 var arabic = args[2];
                 var key = args[1];
@@ -327,12 +322,27 @@ namespace Arabize
                 }
                 else Console.WriteLine("Error: key already exists");
             }
-            else if ((args[0].Equals("remove") || args[0].Equals("r")) && args.Length == 2)
+            else if (args.Length == 2 && (args[0].Equals("remove") || args[0].Equals("r")))
             {
                 var key = args[1];
                 var value = RemoveMacro(key);
                 if (value != null) Console.WriteLine(key + " \u2260 " + value);
                 else Console.WriteLine("Error: unable to find " + key);
+            }
+            else if (args.Length == 1 && (args[0].Equals("path") || args[0].Equals("p")))
+            {
+                System.Diagnostics.Process.Start(MacrosFilePath);
+                Console.WriteLine(MacrosFilePath);
+            }
+            else if (args.Length == 1 && (args[0].Equals("help") || args[0].Equals("h")))
+            {
+                Console.WriteLine("Usage:");
+                Console.WriteLine("  macros            - List all macros");
+                Console.WriteLine("  path              - Open the macros JSON file");
+                Console.WriteLine("  add [key] [value] - Add a new macro where value is arabized");
+                Console.WriteLine("  remove [key]      - Add a new macro where value is literal");
+                Console.WriteLine("  clear             - Clear console screen");
+                Console.WriteLine("  quit              - Exit program");
             }
             else
             {
