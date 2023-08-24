@@ -342,7 +342,7 @@ namespace Arabize
             else if (args.Length == 1 && (args[0].Equals("open") || args[0].Equals("o")))
             {
                 System.Diagnostics.Process.Start(SettingsFilePath);
-                Console.WriteLine(MacrosFilePath);
+                Console.WriteLine(SettingsFilePath);
             }
             else if (args.Length == 2 && (args[0].Equals("open") || args[0].Equals("o")) && (args[1].Equals("macros") || args[1].Equals("m")))
             {
