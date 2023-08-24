@@ -329,7 +329,7 @@ namespace Arabize
                 if (value != null) Console.WriteLine(key + " \u2260 " + value);
                 else Console.WriteLine("Error: unable to find " + key);
             }
-            else if (args.Length == 1 && (args[0].Equals("path") || args[0].Equals("p")))
+            else if (args.Length == 1 && (args[0].Equals("open") || args[0].Equals("o")))
             {
                 System.Diagnostics.Process.Start(MacrosFilePath);
                 Console.WriteLine(MacrosFilePath);
