@@ -338,7 +338,7 @@ namespace Arabize
             {
                 Console.WriteLine("Usage:");
                 Console.WriteLine("  macros            - List all macros");
-                Console.WriteLine("  path              - Open the macros JSON file");
+                Console.WriteLine("  open              - Open the macros JSON file");
                 Console.WriteLine("  add [key] [value] - Add a new macro where value is arabized");
                 Console.WriteLine("  remove [key]      - Add a new macro where value is literal");
                 Console.WriteLine("  clear             - Clear console screen");
