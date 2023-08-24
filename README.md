@@ -68,8 +68,10 @@ Use `arabize remove inna` to remove the macro `inna`.
 
 Use `arabize macros` to get a list of all current macros.
 
+Use `open` to open to the settings JSON and use `open macros` to open the macros JSON.
+
 ## Building
 
 1. Clone the repository: `git clone https://github.com/yojoecapital/Arabize.git`
 2. Build the application using the .NET CLI: `dotnet build`
-3. Run the application: `dotnet run`
+3. Run the application located in `arabize/bin`
