@@ -88,7 +88,7 @@ Use `remove inna` to remove the macro `inna`.
 ### Releasing
 
 ```
-dotnet msbuild --property:Configuration=Release && cd Arabize/bin/Release && 7z a Arabize.zip * && gh release create v1.0.0 ./Arabize.zip -t "v1.0.0" --target main -F ./RELEASE.md && cd ../../..
+dotnet msbuild --property:Configuration=Release && cd Arabize/bin/Release && 7z a Arabize.zip * && gh release create v1.0.1 ./Arabize.zip -t "v1.0.1" --target main -F ./RELEASE.md && cd ../../..
 ```
 
 ## Contact
