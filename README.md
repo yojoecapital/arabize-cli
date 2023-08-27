@@ -4,7 +4,7 @@
 - To access it easier, place the path of the `Arabize` directory in user's `Path` Environment Variable.
 - Arabize can either be used as an interactive Interpreter (REPL) or a command-line program. To begin the REPL, just execute `arabize.exe` without any arguments.
 
-## Usage:
+## Usage
 
 Use `arabize letters` to get a list of all transliterated letters and their Unicode mappings.
 
@@ -28,7 +28,7 @@ This copies this text:
 
 > بسم الله الرحمان الرحيم
 
-### How to Use Diacritics:
+### How to Use Diacritics
 
 Use these sequences at the end of a transliterated letter to add a diacritic ligature to the Arabic Unicode letter.
 
@@ -56,7 +56,7 @@ Will copy this text:
 
 > إِنَّا لِلَّهِ وَإِنَّا إِلَيْهِ رَاجِعُونَ
 
-### How to Use Macros:
+### How to Use Macros
 
 Use `add inna alif.@-noon$'alif` to add إِنَّا in place of `inna` when Arabizing text.
 
@@ -64,8 +64,9 @@ Use `add-lit ArRahman الرَّحْمَان` to add الرَّحْمَان usin
 
 Use `remove inna` to remove the macro `inna`.
 
-## Arguments:
+## Arguments
 
+- `help` or `h`: Display arguments
 - `letters` or `l`: List all transliterated letters and their Unicode mappings
 - `macros` or `m`: List all macros with their key-value mappings
 - `open` or `o`: Open the settings JSON file.
@@ -81,7 +82,7 @@ Use `remove inna` to remove the macro `inna`.
 1. Clone the repository: `git clone https://github.com/yojoecapital/Arabize.git`
 2. Restore the NuGet Packages using the NuGet CLI: `nuget restore`
 3. Build the application using the .NET CLI: `dotnet msbuild`
-4. Run the executable located in `arabize/bin`
+4. Run the executable located in `Arabize/bin`
 
 ### Releasing
 
