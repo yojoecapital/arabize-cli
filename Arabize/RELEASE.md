@@ -1,4 +1,8 @@
-# Release Notes - Version [1.0.0]
+# Release Notes - Version [1.0.1]
+
+## New Features
+
+- List all diacritics with the `diacritics` command.
 
 ## Key Features
 

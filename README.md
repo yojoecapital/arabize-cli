@@ -68,6 +68,7 @@ Use `remove inna` to remove the macro `inna`.
 
 - `help` or `h`: Display arguments
 - `letters` or `l`: List all transliterated letters and their Unicode mappings
+- `diacritics` or `d`: List all transliterated diacritics and their Unicode mappings
 - `macros` or `m`: List all macros with their key-value mappings
 - `open` or `o`: Open the settings JSON file.
 - `open macros`: Open the macros JSON file.

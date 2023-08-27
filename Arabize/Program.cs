@@ -294,6 +294,16 @@ namespace Arabize
                         Console.WriteLine(key + " \u2192 " + letters[key]);
                 }
             }
+            else if (args.Length == 1 && (args[0].Equals("diacritics") || args[0].Equals("d")))
+            {
+                var diacritics = Diacritics;
+                if (diacritics == null) Console.WriteLine("Error: unable to parse mappings");
+                else
+                {
+                    foreach (var key in diacritics.Keys)
+                        Console.WriteLine(key + " \u2192 " + diacritics[key]);
+                }
+            }
             else if (args.Length == 3 && (args[0].Equals("add") || args[0].Equals("a")))
             {
                 var arabic = Arabize(args[2]);
@@ -353,6 +363,7 @@ namespace Arabize
             {
                 Console.WriteLine("Usage:");
                 Console.WriteLine("  letters (l)                  - List all transliterated letters and their Unicode mappings");
+                Console.WriteLine("  diacritics (d)               - List all transliterated diacritics and their Unicode mappings");
                 Console.WriteLine("  macros (m)                   - List all macros with their key-value mappings");
                 Console.WriteLine("  open (o)                     - Open the settings JSON file");
                 Console.WriteLine("  open macros                  - Open the macros JSON file");
