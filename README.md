@@ -1,34 +1,34 @@
 # Arabize
 
-This is a command to translate Arabic-transliterated letters into Arabic Unicode characters and copy to clipboard.
+- This is a command for Windows Systems to translate Arabic-transliterated letters into Arabic Unicode characters and copy to clipboard. 
+- To access it easier, place the path of the `Arabize` directory in user's `Path` Environment Variable.
+- Arabize can either be used as an interactive Interpreter (REPL) or a command-line program. To begin the REPL, just execute `arabize.exe` without any arguments.
 
-To access it easier, place the path of the `Arabize` directory in `Path` for System Variables.
-
-## How to use:
+## Usage:
 
 Use `arabize letters` to get a list of all transliterated letters and their Unicode mappings.
 
-Pass the transliterated letters to have the Arabic Unicode copied to clipboard.
+Pass the transliterated letters to have the Arabic Unicode copied to clipboard. For example:
 
 ```
-$ arabize alif_lam_ra_ha_meem_alif_noon
+> alif_lam_ra_ha_meem_alif_noon
 ```
 
 This copies this text:
 
 > الرحمان 
 
-Use `_` characters to delimit letters. Use space characters to delimit words.
+Use `_` characters to delimit letters. Use space characters to delimit words. For example:
 
 ```
-$ arabize lam_alif alif.@_lam_haa alif.@_lam_alif alif_lam_lam_haa
+> ba_seen_meem alif_lam_lam_haa alif_lam_ra_ha_meem_alif_noon alif_lam_ra_ha_ya_meem
 ```
 
 This copies this text:
 
-> لا إله إلا الله
+> بسم الله الرحمان الرحيم
 
-## How to Use Diacritics:
+### How to Use Diacritics:
 
 Use these sequences at the end of a transliterated letter to add a diacritic ligature to the Arabic Unicode letter.
 
@@ -46,32 +46,51 @@ Use these sequences at the end of a transliterated letter to add a diacritic lig
 |   `.@`   | &#x655;  *hamza below*  |
 |   `~`    | &#x653;  *maddah above* |
 
-Note that diacritics also act as delimiters between letters. 
-
-For example:
+Note that diacritics also act as delimiters between letters. For example:
 
 ```
-$ arabize alif.@-noon$'alif lam-lam$'haa- waw'alif.@-noon$'alif alif.@-lam'ya#haa- ra'alif_jeem-ayn%waw_noon'
+> alif.@-noon$'alif lam-lam$'haa- waw'alif.@-noon$'alif alif.@-lam'ya#haa- ra'alif_jeem-ayn%waw_noon'
 ```
 
 Will copy this text:
 
 > إِنَّا لِلَّهِ وَإِنَّا إِلَيْهِ رَاجِعُونَ
 
-## How to Use Macros:
+### How to Use Macros:
 
-Use `arabize add inna alif.@-noon$'alif` to add إِنَّا in place of `inna`.
+Use `add inna alif.@-noon$'alif` to add إِنَّا in place of `inna` when Arabizing text.
 
-Use `arabize add-lit ArRahman الرَّحْمَان` to add الرَّحْمَان using its literal Unicode characters in place of `ArRahman`.
+Use `add-lit ArRahman الرَّحْمَان` to add الرَّحْمَان using its literal Unicode characters in place of `ArRahman`.
 
-Use `arabize remove inna` to remove the macro `inna`.
+Use `remove inna` to remove the macro `inna`.
 
-Use `arabize macros` to get a list of all current macros.
+## Arguments:
 
-Use `open` to open to the settings JSON and use `open macros` to open the macros JSON.
+- `letters` or `l`: List all transliterated letters and their Unicode mappings
+- `macros` or `m`: List all macros with their key-value mappings
+- `open` or `o`: Open the settings JSON file.
+- `open macros`: Open the macros JSON file.
+- `add [key] [value]` or `a [key] [value]`: Add a new macro where the value is Arabized
+- `add-lit [key] [value]` or `al [key] [value]`: Add a new macro where the value is literal
+- `remove [key]` or `rm [key]`: Remove an existing macro
+- `clear` or `c`: Clear the console screen
+- `quit` or `q`: Exit the program
 
 ## Building
 
 1. Clone the repository: `git clone https://github.com/yojoecapital/Arabize.git`
-2. Build the application using the .NET CLI: `dotnet build`
-3. Run the application located in `arabize/bin`
+2. Restore the NuGet Packages using the NuGet CLI: `nuget restore`
+3. Build the application using the .NET CLI: `dotnet msbuild`
+4. Run the executable located in `arabize/bin`
+
+### Releasing
+
+```
+dotnet msbuild --property:Configuration=Release && cd Arabize/bin/Release && 7z a Arabize.zip * && gh release create v1.0.0 ./Arabize.zip -t "v1.0.0" -F ./RELEASE.md && cd ../../..
+```
+
+
+
+## Contact
+
+For any inquiries or feedback, contact me at [yousefsuleiman10@gmail.com](mailto:yousefsuleiman10@gmail.com).

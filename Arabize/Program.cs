@@ -332,7 +332,7 @@ namespace Arabize
                 }
                 else Console.WriteLine("Error: key already exists");
             }
-            else if (args.Length == 2 && (args[0].Equals("remove") || args[0].Equals("r")))
+            else if (args.Length == 2 && (args[0].Equals("remove") || args[0].Equals("rm") || args[0].Equals("r")))
             {
                 var key = args[1];
                 var value = RemoveMacro(key);
@@ -352,13 +352,15 @@ namespace Arabize
             else if (args.Length == 1 && (args[0].Equals("help") || args[0].Equals("h")))
             {
                 Console.WriteLine("Usage:");
-                Console.WriteLine("  macros            - List all macros");
-                Console.WriteLine("  open              - Open the settings JSON file");
-                Console.WriteLine("  open macros       - Open the macros JSON file");
-                Console.WriteLine("  add [key] [value] - Add a new macro where value is arabized");
-                Console.WriteLine("  remove [key]      - Add a new macro where value is literal");
-                Console.WriteLine("  clear             - Clear console screen");
-                Console.WriteLine("  quit              - Exit program");
+                Console.WriteLine("  letters (l)                  - List all transliterated letters and their Unicode mappings");
+                Console.WriteLine("  macros (m)                   - List all macros with their key-value mappings");
+                Console.WriteLine("  open (o)                     - Open the settings JSON file");
+                Console.WriteLine("  open macros                  - Open the macros JSON file");
+                Console.WriteLine("  add (a) [key] [value]        - Add a new macro where value is arabized");
+                Console.WriteLine("  add-lit (al) [key] [value]   - Add a new macro where value is literal");
+                Console.WriteLine("  remove (rm) [key]            - Remove an existing macro");
+                Console.WriteLine("  clear (c)                    - Clear console screen");
+                Console.WriteLine("  quit (q)                     - Exit program");
             }
             else
             {
