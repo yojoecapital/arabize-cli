@@ -359,8 +359,8 @@ namespace Arabize
                 Console.WriteLine("  add (a) [key] [value]        - Add a new macro where value is arabized");
                 Console.WriteLine("  add-lit (al) [key] [value]   - Add a new macro where value is literal");
                 Console.WriteLine("  remove (rm) [key]            - Remove an existing macro");
-                Console.WriteLine("  clear (cls)                  - Clear console screen");
-                Console.WriteLine("  quit (q)                     - Exit program");
+                Console.WriteLine("  clear (cls)                  - Clear the console screen");
+                Console.WriteLine("  quit (q)                     - Exit the program");
             }
             else
             {
