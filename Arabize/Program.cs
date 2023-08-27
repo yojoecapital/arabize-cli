@@ -373,7 +373,7 @@ namespace Arabize
                         Clipboard.SetText(arabic);
                         Console.WriteLine(arabic);
                     }
-                    else Console.WriteLine("Error: empty buffer");
+                    else return;
                 }
             }
         }
