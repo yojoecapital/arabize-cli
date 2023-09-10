@@ -1,4 +1,4 @@
-arabize/bin/
+ArabizeCore/bin/
 .vs/
-arabize/obj
+ArabizeCore/obj
 packages/
