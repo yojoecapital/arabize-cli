@@ -1,0 +1,35 @@
+<root>
+  <row value="ا" key="alif" />
+  <row value="ب" key="ba" />
+  <row value="ت" key="ta" />
+  <row value="ث" key="tha" />
+  <row value="ج" key="jeem" />
+  <row value="ح" key="ha" />
+  <row value="خ" key="kha" />
+  <row value="د" key="dal" />
+  <row value="ذ" key="thal" />
+  <row value="ر" key="ra" />
+  <row value="ز" key="zay" />
+  <row value="س" key="seen" />
+  <row value="ش" key="sheen" />
+  <row value="ص" key="sad" />
+  <row value="ض" key="dad" />
+  <row value="ط" key="tta" />
+  <row value="ظ" key="dha" />
+  <row value="ع" key="ayn" />
+  <row value="غ" key="ghayn" />
+  <row value="ف" key="fa" />
+  <row value="ق" key="qaf" />
+  <row value="ك" key="kaf" />
+  <row value="ل" key="lam" />
+  <row value="م" key="meem" />
+  <row value="ن" key="noon" />
+  <row value="ه" key="haa" />
+  <row value="و" key="waw" />
+  <row value="ي" key="ya" />
+  <row value="ء" key="hamza" />
+  <row value="&#1649;" key="wasla" />
+  <row value="ة" key="marbuta" />
+  <row value="ى" key="maksura" />
+  <row value="◌" key="(?)" />
+</root>

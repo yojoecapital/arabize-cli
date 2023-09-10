@@ -1,0 +1,31 @@
+<root>
+  <!-- these rows should be sorted in decreasing order of the length of their keys -->
+  <row key=".@''" value="&#x655;&#x64B;" name="hamza below fathatan" />
+  <row key=".@--" value="&#x655;&#x64D;" name="hamza below kasratan" />
+  <row key=".@%%" value="&#x655;&#x64C;" name="hamza below dammatan" />
+  <row key=".@#" value="&#x655;&#x652;" name="hamza below sukun" />
+  <row key=".@'" value="&#x655;&#x64E;" name="hamza below fatha" />
+  <row key=".@-" value="&#x655;&#x650;" name="hamza below kasra" />
+  <row key=".@%" value="&#x655;&#x64F;" name="hamza below damma" />
+  <row key="@''" value="&#x654;&#x64B;" name="hamza above fathatan" />
+  <row key="@--" value="&#x654;&#x64D;" name="hamza above kasratan" />
+  <row key="@%%" value="&#x654;&#x64C;" name="hamza above dammatan" />
+  <row key=".@" value="&#x655;" name="hamza below" />
+  <row key="@#" value="&#x654;&#x652;" name="hamza above sukun" />
+  <row key="@'" value="&#x654;&#x64E;" name="hamza above fatha" />
+  <row key="@-" value="&#x654;&#x650;" name="hamza above kasra" />
+  <row key="@%" value="&#x654;&#x64F;" name="hamza above damma" />
+  <row key="''" value="&#x64B;" name="fathatan" />
+  <row key="--" value="&#x64D;" name="kasratan" />
+  <row key="%%" value="&#x64C;" name="dammatan"/>
+  <row key="$'" value="&#x651;&#x64E;" name="shadda fatha"/>
+  <row key="$%" value="&#x651;&#x64F;" name="shadda damma"/>
+  <row key="$-" value="&#x651;&#x650;" name="shadda kasra"/>
+  <row key="@" value="&#x654;" name="hamza above" />
+  <row key="~" value="&#x653;" name="maddah above" />
+  <row key="$" value="&#x651;" name="shadda"/>
+  <row key="'" value="&#x64E;" name="fatha" />
+  <row key="-" value="&#x650;" name="kasra" />
+  <row key="%" value="&#x64F;" name="damma" />
+  <row key="#" value="&#x652;" name="sukun"/>
+</root>
