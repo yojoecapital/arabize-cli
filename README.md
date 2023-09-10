@@ -82,13 +82,13 @@ Use `remove inna` to remove the macro `inna`.
 
 1. Clone the repository: `git clone https://github.com/yojoecapital/Arabize.git`
 2. Restore the NuGet Packages using the NuGet CLI: `nuget restore`
-3. Build the application using the .NET CLI: `dotnet msbuild`
+3. Build the application using the .NET CLI: `dotnet build`
 4. Run the executable located in `Arabize/bin`
 
 ### Releasing
 
 ```
-dotnet msbuild --property:Configuration=Release && cd Arabize/bin/Release/net6.0-windows && rm *.zip && 7z a Arabize.zip * && gh release create v1.1.0 ./Arabize.zip -t "v1.1.0" --target main -F ./RELEASE.md && cd ../../../..
+dotnet build --property:Configuration=Release && cd ArabizeCore/bin/Release/net6.0-windows && del *.zip && 7z a Arabize.zip * && gh release create v1.1.0 ./Arabize.zip -t "v1.1.0" --target main -F ./RELEASE.md && cd ../../../..
 ```
 
 ## Contact
