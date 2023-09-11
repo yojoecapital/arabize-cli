@@ -85,39 +85,6 @@ Use `remove inna` to remove the macro `inna`.
 3. Build the application using the .NET CLI: `dotnet build`
 4. Run the executable located in `Arabize/bin`
 
-### Releasing
-
-```
-dotnet build --property:Configuration=Release && cd ArabizeCore/bin/Release/net6.0-windows && del *.zip && 7z a Arabize.zip * && gh release create v1.1.0 ./Arabize.zip -t "v1.1.0" --target main -F ./RELEASE.md && cd ../../../..
-```
-
-### Updating
-
-```sh
-#!/bin/bash
-
-# GitHub repository and release information
-REPO_OWNER="yojoecapital"
-REPO_NAME="Arabize"
-
-# Download the latest release ZIP file
-gh release download -R "$REPO_OWNER/$REPO_NAME" --pattern "*.zip"
-
-# Rename the settings file
-mv settings.json tmp.json
-
-# Extract the ZIP file using 7z (assuming 7z is installed)
-7z x "$REPO_NAME.zip"
-
-# Restore the settings file
-mv tmp.json settings.json
-
-# Delete the downloaded ZIP file
-rm "$REPO_NAME.zip"
-
-echo "Download, extraction, and cleanup complete."
-```
-
 ## Contact
 
 For any inquiries or feedback, contact me at [yousefsuleiman10@gmail.com](mailto:yousefsuleiman10@gmail.com).
