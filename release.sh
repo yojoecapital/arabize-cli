@@ -7,6 +7,7 @@ RELEASE_TAG="v1.1.0"
 RELEASE_TITLE="$RELEASE_TAG"
 RELEASE_TARGET="main"
 RELEASE_NOTES="./RELEASE.md"
+UPDATE_SCRIPT="./update.sh"
 
 # Check if the release and tag exist and delete them
 if gh release view "$RELEASE_TAG" > /dev/null 2>&1; then
@@ -23,8 +24,11 @@ fi
 # Build the project with Release configuration
 dotnet build --property:Configuration=Release
 
-# Enter directory
-cd "$BUILD_PATH"
+# Move update file
+mv "$UPDATE_SCRIPT" "$BUILD_PATH/$UPDATE_SCRIPT"
+
+# Copy update file
+cp "$UPDATE_SCRIPT" "$BUILD_PATH"
 
 # Delete existing .zip file
 rm *.zip
