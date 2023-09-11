@@ -98,7 +98,7 @@ dotnet build --property:Configuration=Release && cd ArabizeCore/bin/Release/net6
 
 # GitHub repository and release information
 REPO_OWNER="yojoecapital"
-REPO_NAME="arabize"
+REPO_NAME="Arabize"
 
 # Download the latest release ZIP file
 gh release download -R "$REPO_OWNER/$REPO_NAME" --pattern "*.zip"
@@ -107,13 +107,13 @@ gh release download -R "$REPO_OWNER/$REPO_NAME" --pattern "*.zip"
 mv settings.json tmp.json
 
 # Extract the ZIP file using 7z (assuming 7z is installed)
-7z x Arabize.zip
+7z x "$REPO_NAME.zip"
 
 # Restore the settings file
 mv tmp.json settings.json
 
 # Delete the downloaded ZIP file
-rm Arabize.zip
+rm "$REPO_NAME.zip"
 
 echo "Download, extraction, and cleanup complete."
 ```
