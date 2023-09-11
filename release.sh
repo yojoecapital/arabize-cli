@@ -24,8 +24,8 @@ fi
 # Build the project with Release configuration
 dotnet build --property:Configuration=Release
 
-# Move update file
-mv "$UPDATE_SCRIPT" "$BUILD_PATH/$UPDATE_SCRIPT"
+# Copy update file
+cp "$UPDATE_SCRIPT" "$BUILD_PATH"
 
 # Copy update file
 cp "$UPDATE_SCRIPT" "$BUILD_PATH"
