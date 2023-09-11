@@ -27,8 +27,8 @@ dotnet build --property:Configuration=Release
 # Copy update file
 cp "$UPDATE_SCRIPT" "$BUILD_PATH"
 
-# Copy update file
-cp "$UPDATE_SCRIPT" "$BUILD_PATH"
+# Enter directory
+cd "$BUILD_PATH"
 
 # Delete existing .zip file
 rm *.zip
