@@ -61,7 +61,7 @@ namespace ArabizeCore
                 "Open the macros JSON file."
             );
             repl.AddCommand(
-                _ => args.Length > 0,
+                args => args.Length > 0,
                 commandManager.Arabize,
                 "[text]",
                 "Arabize [text]."
