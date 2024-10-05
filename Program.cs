@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Microsoft.VisualBasic;
 
 [JsonSerializable(typeof(Dictionary<string, string>))]
 public partial class JsonContext : JsonSerializerContext { }
@@ -111,12 +112,11 @@ internal class Program
         }
 
         var arabic = new List<string>(args.Length);
-        if (macros != null) Array.ForEach(args, word => arabic.Add(ArabizeWord(word, macros)));
-        else Array.ForEach(args, word => arabic.Add(ArabizeWord(word)));
+        foreach (var word in args) arabic.Add(ArabizeWord(word, macros));
         Console.WriteLine(string.Join(' ', arabic));
     }
 
-    private static string ArabizeWord(string word, Dictionary<string, string> macros)
+    private static string ArabizeWord(string word, Dictionary<string, string>? macros)
     {
         var stringBuilder = new StringBuilder();
         var splitWords = word.Split('-');
@@ -124,35 +124,21 @@ internal class Program
         {
             foreach (var token in SplitWithDelimiters(splitWord, diacritics.Keys))
             {
-                if (macros.TryGetValue(token, out var value)) stringBuilder.Append(ArabizeWord(value));
-                else ArabizeToken(stringBuilder, token);
+                var key = TrimForDiacritic(token, out string? diacritic);
+                if (macros != null && macros.TryGetValue(key, out var value)) 
+                {
+                    stringBuilder.Append(ArabizeWord(value, null));
+                    stringBuilder.Append(diacritic);
+                }
+                else
+                {
+                    var letter = FindLetter(key);
+                    stringBuilder.Append(letter);
+                    stringBuilder.Append(diacritic);
+                }
             }
         }
         return stringBuilder.ToString();
-    }
-
-    private static string ArabizeWord(string word)
-    {
-        var stringBuilder = new StringBuilder();
-        var splitWords = word.Split('-');
-        foreach (var splitWord in splitWords)
-        {
-            foreach (var token in SplitWithDelimiters(splitWord, diacritics.Keys))
-            {
-                ArabizeToken(stringBuilder, token);
-            }
-        }
-        return stringBuilder.ToString();
-    }
-
-    private static void ArabizeToken(StringBuilder stringBuilder, string token)
-    {
-        var key = FindClosestKey(letters, TrimForDiacritic(token, out string? diacritic));
-        if (key != null)
-        {
-            stringBuilder.Append(letters[key]);
-            stringBuilder.Append(diacritic);
-        }
     }
 
     private static IEnumerable<string> SplitWithDelimiters(string input, IEnumerable<string> delimiters)
@@ -196,12 +182,11 @@ internal class Program
         return letter;
     }
 
-    private static string? FindClosestKey(Dictionary<string, string> mapping, string key)
+    private static string FindLetter(string key)
     {
         int minDistance = int.MaxValue;
-        string? closestKey = null;
-
-        foreach (var s in mapping.Keys)
+        string closestKey = string.Empty;
+        foreach (var s in letters.Keys)
         {
             int distance = ComputeLevenshteinDistance(s, key);
 
@@ -211,8 +196,7 @@ internal class Program
                 closestKey = s;
             }
         }
-
-        return closestKey;
+        return letters[closestKey];
     }
 
     private static int ComputeLevenshteinDistance(string s, string t)
