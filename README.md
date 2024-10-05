@@ -19,7 +19,28 @@ Use the `--help` or `-h` argument to see all supported letter and diacritic comb
 arabize --help
 ```
 
+### Macros
+
+You can define your own shortcut replacements by making a JSON file at `~/.config/arabize/macros.json`. And example JSON file looks like this:
+
+```json
+{
+	"yusuf": "ya%waw-seen%fa",
+	"al": "alif-lam"
+}
+```
+
+Now, `arabize` will perform the following transliteration:
+
+```bash
+arabize yusuf
+# The output will be: يُوسُف
+```
+
+**Make sure** not to include hyphens (-) or space characters in your macros!
+
 ## Building
+
 To compile the project and run it as a self-contained executable:
 
 ```bash

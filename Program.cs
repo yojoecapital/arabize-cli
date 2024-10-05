@@ -1,6 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
+[JsonSerializable(typeof(Dictionary<string, string>))]
+public partial class JsonContext : JsonSerializerContext { }
 
 internal class Program
 {
@@ -74,32 +80,79 @@ internal class Program
     };
 
     static void Main(string[] args)
-    {
+    {        
         Console.InputEncoding = Encoding.UTF8;
         Console.OutputEncoding = Encoding.UTF8;
 
+        var macrosPath = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "arabize", "macros.json");
         if (args.Length == 1 && (args[0].Equals("--help") || args[0].Equals("-h")))
         {
             foreach (var pair in diacritics) Console.WriteLine($"{pair.Key} → {pair.Value}");
             foreach (var pair in letters) Console.WriteLine($"{pair.Key} → {pair.Value}");
+            Console.WriteLine($"Macro path: {macrosPath}");
             Console.WriteLine("Example: ya%waw-seen%fa → يُوسُف");
             return;
         }
 
-        var diacriticsKeys = diacritics.Keys;
-        var arabic = new List<string>();
-        foreach (var word in args)
+        Dictionary<string, string>? macros = null;
+        if (File.Exists(macrosPath))
         {
-            var tokens = word.Split('-');
-            var arabicWord = string.Empty;
-            foreach (var token in tokens) foreach (var splitLetter in SplitWithDelimiters(token, diacriticsKeys))
+            try
             {
-                var key = FindClosestKey(letters, TrimForDiacritic(splitLetter, out string? diacritic));
-                if (key != null) arabicWord += letters[key] + diacritic;
+                string json = File.ReadAllText(macrosPath);
+                macros = JsonSerializer.Deserialize(json, JsonContext.Default.DictionaryStringString);
             }
-            arabic.Add(arabicWord);
+            catch (JsonException exception)
+            {
+                Console.Error.WriteLine(exception.Message);
+                Environment.Exit(1);
+                return;
+            }
         }
-        if (arabic.Count > 0) Console.WriteLine(string.Join(" ", arabic));
+
+        var arabic = new List<string>(args.Length);
+        if (macros != null) Array.ForEach(args, word => arabic.Add(ArabizeWord(word, macros)));
+        else Array.ForEach(args, word => arabic.Add(ArabizeWord(word)));
+        Console.WriteLine(string.Join(' ', arabic));
+    }
+
+    private static string ArabizeWord(string word, Dictionary<string, string> macros)
+    {
+        var stringBuilder = new StringBuilder();
+        var splitWords = word.Split('-');
+        foreach (var splitWord in splitWords)
+        {
+            foreach (var token in SplitWithDelimiters(splitWord, diacritics.Keys))
+            {
+                if (macros.TryGetValue(token, out var value)) stringBuilder.Append(ArabizeWord(value));
+                else ArabizeToken(stringBuilder, token);
+            }
+        }
+        return stringBuilder.ToString();
+    }
+
+    private static string ArabizeWord(string word)
+    {
+        var stringBuilder = new StringBuilder();
+        var splitWords = word.Split('-');
+        foreach (var splitWord in splitWords)
+        {
+            foreach (var token in SplitWithDelimiters(splitWord, diacritics.Keys))
+            {
+                ArabizeToken(stringBuilder, token);
+            }
+        }
+        return stringBuilder.ToString();
+    }
+
+    private static void ArabizeToken(StringBuilder stringBuilder, string token)
+    {
+        var key = FindClosestKey(letters, TrimForDiacritic(token, out string? diacritic));
+        if (key != null)
+        {
+            stringBuilder.Append(letters[key]);
+            stringBuilder.Append(diacritic);
+        }
     }
 
     private static IEnumerable<string> SplitWithDelimiters(string input, IEnumerable<string> delimiters)
@@ -107,7 +160,7 @@ internal class Program
         int split;
         while ((split = IndexOfFirstDelimiters(input, delimiters)) != -1)
         {
-            yield return input.Substring(0, split);
+            yield return input[..split];
             input = input[split..];
         }
         if (!string.IsNullOrEmpty(input)) yield return input;
