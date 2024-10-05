@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>arabize</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <!-- Specify the platform (e.g., win-x64, linux-x64, osx-x64) -->
+    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+    <!-- Ensures all dependencies are included in the single file -->
+    <SelfContained>true</SelfContained> 
+    <!-- Optional: Trims unused parts of the framework -->
+    <PublishTrimmed>true</PublishTrimmed>
+    <!-- This disables the generation of the .pdb file -->
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+
+</Project>
