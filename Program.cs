@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Microsoft.VisualBasic;
 
 [JsonSerializable(typeof(Dictionary<string, string>))]
 public partial class JsonContext : JsonSerializerContext { }
@@ -84,6 +84,7 @@ internal class Program
     {        
         Console.InputEncoding = Encoding.UTF8;
         Console.OutputEncoding = Encoding.UTF8;
+        args = args.SelectMany(arg => arg.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)).ToArray();
 
         var macrosPath = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "arabize", "macros.json");
         if (args.Length == 1 && (args[0].Equals("--help") || args[0].Equals("-h")))
