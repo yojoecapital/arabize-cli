@@ -5,11 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 
 [JsonSerializable(typeof(Dictionary<string, string>))]
 public partial class JsonContext : JsonSerializerContext { }
 
-internal class Program
+internal partial class Program
 {
     static readonly Dictionary<string, string> diacritics = new()
     {
@@ -84,7 +85,7 @@ internal class Program
     {        
         Console.InputEncoding = Encoding.UTF8;
         Console.OutputEncoding = Encoding.UTF8;
-        args = args.SelectMany(arg => arg.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)).ToArray();
+        args = args.SelectMany(arg => MyRegex().Split(arg).Where(word => !string.IsNullOrEmpty(word))).ToArray();
 
         var macrosPath = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "arabize", "macros.json");
         if (args.Length == 1 && (args[0].Equals("--help") || args[0].Equals("-h")))
@@ -228,4 +229,7 @@ internal class Program
 
         return d[m, n];
     }
+
+    [GeneratedRegex(@"\s+")]
+    private static partial Regex MyRegex();
 }
