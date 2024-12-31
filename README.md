@@ -2,6 +2,13 @@
 
 This project is a simple Arabic transliteration tool that converts ASCII input into Arabic script with the appropriate diacritics. 
 
+## Installation
+
+You can execute the following command to install or update `arabize`.
+
+```bash
+curl -L -o /tmp/arabize https://github.com/yojoecapital/arabize/releases/latest/download/arabize && chmod 755 /tmp/arabize && sudo mv /tmp/arabize /usr/local/bin/
+```
 
 ## Usage
 
