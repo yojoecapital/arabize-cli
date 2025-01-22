@@ -7,7 +7,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
-namespace Arabize
+namespace ArabizeCli
 {
     [JsonSerializable(typeof(Dictionary<string, string>))]
     public partial class JsonContext : JsonSerializerContext { }
@@ -125,7 +125,7 @@ namespace Arabize
             }
             args = inputWords.ToArray();
             var arabic = new List<string>(args.Length);
-            foreach (var word in args) arabic.Add(ArabizeWord(word, macros));
+            foreach (var word in args) arabic.Add(ArabizeCliWord(word, macros));
             Console.WriteLine(string.Join(' ', arabic));
         }
 
@@ -137,7 +137,7 @@ namespace Arabize
             Console.WriteLine("Example: ya%waw-seen%fa → يُوسُف");
         }
 
-        private static string ArabizeWord(string word, Dictionary<string, string>? macros)
+        private static string ArabizeCliWord(string word, Dictionary<string, string>? macros)
         {
             var stringBuilder = new StringBuilder();
             var splitWords = word.Split('-');
@@ -148,7 +148,7 @@ namespace Arabize
                     var key = TrimForDiacritic(token, out string? diacritic);
                     if (macros != null && macros.TryGetValue(key, out var value))
                     {
-                        stringBuilder.Append(ArabizeWord(value, null));
+                        stringBuilder.Append(ArabizeCliWord(value, null));
                         stringBuilder.Append(diacritic);
                     }
                     else

@@ -1,4 +1,4 @@
-# Arabize
+# ArabizeCli
 
 This project is a simple Arabic transliteration tool that converts ASCII input into Arabic script with the appropriate diacritics. 
 
