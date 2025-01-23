@@ -7,7 +7,7 @@ This project is a simple Arabic transliteration tool that converts ASCII input i
 You can execute the following command to install or update `arabize`.
 
 ```bash
-curl -L -o /tmp/arabize https://github.com/yojoecapital/arabize/releases/latest/download/arabize && chmod 755 /tmp/arabize && sudo mv /tmp/arabize /usr/local/bin/
+curl -L -o /tmp/arabize https://github.com/yojoecapital/arabize/releases/latest/download/arabize-cli && chmod 755 /tmp/arabize && sudo mv /tmp/arabize /usr/local/bin/
 ```
 
 ## Usage
@@ -19,16 +19,15 @@ arabize ya%waw-seen%fa
 # The output will be: يُوسُف
 ```
 
-### Help Command
-Use the `--help` or `-h` argument to see all supported letter and diacritic combinations:
+### List mappings
 
-```bash
-arabize --help
-```
+- use `list l` to list letter mappings
+- use `list d` to list diacritic mappings
+- use `list m` to list custom macro mappings
 
 ### Macros
 
-You can define your own shortcut replacements by making a JSON file at `~/.config/arabize/macros.json`. And example JSON file looks like this:
+You can use the `edit` command to open the macros file in your default text editor.
 
 ```json
 {

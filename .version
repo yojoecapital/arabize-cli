@@ -1,0 +1,2 @@
+VERSION="1.0.0"
+FILES="bin/Release/net8.0/linux-x64/publish/arabize,bin/Release/net8.0/win-x64/publish/arabize.exe"
