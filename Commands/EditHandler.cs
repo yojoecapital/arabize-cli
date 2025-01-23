@@ -9,7 +9,6 @@ namespace ArabizeCli.Commands
     {
         public static void Handle()
         {
-            string text;
             Directory.CreateDirectory(Defaults.configurationPath);
             var macrosPath = Path.Join(Defaults.configurationPath, Defaults.macrosFileName);
             var editor = Environment.GetEnvironmentVariable("EDITOR")
@@ -34,8 +33,7 @@ namespace ArabizeCli.Commands
             {
                 throw new Exception($"Could not start '{editor}'");
             }
-            text = File.ReadAllText(macrosPath);
-            var macros = JsonSerializer.Deserialize(text, JsonContext.Default.DictionaryStringString);
+            var macros = JsonContext.Get(macrosPath);
             Console.WriteLine($"{macros.Count} macro(s).");
         }
 

@@ -28,8 +28,7 @@ namespace ArabizeCli.Commands
             {
                 try
                 {
-                    string json = File.ReadAllText(macrosPath);
-                    macros = JsonSerializer.Deserialize(json, JsonContext.Default.DictionaryStringString);
+                    macros = JsonContext.Get(macrosPath);
                 }
                 catch
                 {

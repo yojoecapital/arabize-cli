@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using ArabizeCli.Arguments;
@@ -14,9 +15,7 @@ namespace ArabizeCli.Commands
                 case ListOption.M:
                     var macrosPath = Path.Join(Defaults.configurationPath, Defaults.macrosFileName);
                     if (!File.Exists(macrosPath)) return;
-                    var json = File.ReadAllText(macrosPath);
-                    var macros = JsonSerializer.Deserialize(json, JsonContext.Default.DictionaryStringString);
-                    if (macros == null) return;
+                    var macros = JsonContext.Get(macrosPath);
                     foreach (var macro in macros)
                     {
                         Console.WriteLine($"{macro.Key} → {macros.Values}");
