@@ -18,7 +18,7 @@ namespace ArabizeCli.Commands
                     var macros = JsonContext.Get(macrosPath);
                     foreach (var macro in macros)
                     {
-                        Console.WriteLine($"{macro.Key} → {macros.Values}");
+                        Console.WriteLine($"{macro.Key} → {macro.Value}");
                     }
                     return;
                 case ListOption.D:
