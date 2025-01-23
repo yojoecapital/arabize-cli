@@ -38,5 +38,5 @@ arabize yusuf
 To install the Arabize CLI on Linux, run the following command:
 
 ```bash
-curl -L -o /tmp/arabize https://github.com/yojoecapital/arabize/releases/latest/download/arabize-cli && chmod 755 /tmp/arabize && sudo mv /tmp/arabize /usr/local/bin/
+curl -L -o /tmp/arabize https://github.com/yojoecapital/arabize-cli/releases/latest/download/arabize && chmod 755 /tmp/arabize && sudo mv /tmp/arabize /usr/local/bin/
 ```
