@@ -1,6 +1,8 @@
+I'm excited to announce the official release of the Arabize CLI.
+
 ## Features
 
-To run the transliterator, provide a word sequence. Words should be separated by spaces, and letters should be separated by hyphens (`-`) or diacritics.
+To run the transliterator, provide a word sequence. Words should be separated by spaces, and letters should be separated by hyphens `-` or diacritics.
 
 ```bash
 arabize ya%waw-seen%fa
@@ -32,6 +34,8 @@ arabize yusuf
 ```
 
 ## Installation
+
+To install the Arabize CLI on Linux, run the following command:
 
 ```bash
 curl -L -o /tmp/arabize https://github.com/yojoecapital/arabize/releases/latest/download/arabize-cli && chmod 755 /tmp/arabize && sudo mv /tmp/arabize /usr/local/bin/
