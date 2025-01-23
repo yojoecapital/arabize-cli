@@ -37,7 +37,7 @@ namespace ArabizeCli.Commands
             }
             args = [.. inputWords];
             var arabic = new List<string>(args.Length);
-            foreach (var word in args) arabic.Add(ArabizeCliWord(word, macros));
+            foreach (var word in args) arabic.Add(ArabizeWord(word, macros));
             Console.WriteLine(string.Join(' ', arabic));
         }
 
@@ -62,7 +62,7 @@ namespace ArabizeCli.Commands
             return d[m, n];
         }
 
-        private static string ArabizeCliWord(string word, Dictionary<string, string> macros)
+        public static string ArabizeWord(string word, Dictionary<string, string> macros)
         {
             var stringBuilder = new StringBuilder();
             var splitWords = word.Split('-');
@@ -73,7 +73,7 @@ namespace ArabizeCli.Commands
                     var key = TrimForDiacritic(token, out string diacritic);
                     if (macros != null && macros.TryGetValue(key, out var value))
                     {
-                        stringBuilder.Append(ArabizeCliWord(value, null));
+                        stringBuilder.Append(ArabizeWord(value, null));
                         stringBuilder.Append(diacritic);
                     }
                     else

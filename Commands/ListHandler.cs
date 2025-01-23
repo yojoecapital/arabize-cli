@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text.Json;
 using ArabizeCli.Arguments;
 
 namespace ArabizeCli.Commands
@@ -18,7 +16,7 @@ namespace ArabizeCli.Commands
                     var macros = JsonContext.Get(macrosPath);
                     foreach (var macro in macros)
                     {
-                        Console.WriteLine($"{macro.Key} → {macros.Values}");
+                        Console.WriteLine($"{macro.Key} → {ArabizeHandler.ArabizeWord(macro.Value, null)}");
                     }
                     return;
                 case ListOption.D:
